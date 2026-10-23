@@ -852,7 +852,7 @@ function applyNeedsDecay(now = Date.now()) {
 
   // Recover only for the portion of the interval when all basic needs stayed at 60+.
   if (allStartedHealthy && healthyRecoveryMs > 0) {
-    state.health = clamp(state.health + (healthyRecoveryMs / hourMs) * 0.5);
+    state.health = clamp(state.health + (healthyRecoveryMs / hourMs) * 2);
   }
 
   state.lastNeedsUpdate = now;
