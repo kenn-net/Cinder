@@ -8,6 +8,9 @@ const CLEANLINESS_DECAY_MS = 12 * 60 * 1000;
 const NEEDS_TICK_MS = 30 * 1000;
 let nextActionAt = 0;
 let needsTimer = null;
+let idleDialogueTimer = null;
+let petAnimationTimer = null;
+let lastUserActivityAt = Date.now();
 
 const defaults = {
   name: "Cinder",
@@ -35,191 +38,384 @@ const $ = (id) => document.getElementById(id);
 const pet = $("pet");
 const bubble = $("speechBubble");
 const note = $("actionNote");
-
 const dialogue = {
   feed: [
-    "Thanks. I was getting hungry.",
-    "That was good.",
-    "Could I have a little more later?",
-    "Food makes this a better day.",
-    "Oh, just what I needed.",
-    "I didn't realize how hungry I was.",
-    "That hit the spot.",
-    "Got any more of that?",
-    "I could get used to this.",
-    "Eating is probably my favorite activity.",
-    "That was pretty good, actually.",
-    "I was starting to think you'd forgotten.",
-    "My stomach says thank you.",
-    "Well, that was nice.",
-    "A full stomach makes everything better.",
-    "I appreciate the snack.",
-    "You always seem to know when I'm hungry.",
-    "I could use a little more, but this is fine.",
-    "That should keep me going for a while.",
-    "Food acquired. Life is good.",
-    "I was just thinking about food.",
-    "Now I can relax.",
-    "That was exactly what I wanted.",
-    "You came prepared, huh?",
-    "Not bad. I'd give it a solid rating.",
-    "I might need another snack later.",
-    "Okay, I'm satisfied for now.",
-    "This is a pretty good day already.",
-    "I wonder what's on the menu next time.",
-    "All right, time for a food coma."
+    "Enjoy your birthday snacks! You deserve them.",
+    "Hey, save some room for your favorite treats!",
+    "I hope you get to eat all your favorite foods today.",
+    "Birthday snacks just hit different, huh?",
+    "Now that's what I call a birthday treat!",
+    "You better be treating yourself today.",
+    "What birthday snacks did you get? Anything good?",
+    "Go on, have another bite. It's your birthday!",
+    "I hope someone got you something delicious.",
+    "A birthday without good food? Unacceptable.",
+    "I hope your birthday cake tastes amazing!",
+    "Don't forget to eat properly between all the fun.",
+    "You deserve something sweet today. And tomorrow, too.",
+    "What's your favorite birthday food? I'm curious.",
+    "I hope your birthday table is full of your favorites.",
+    "Go enjoy your snacks, birthday girl!",
+    "I bet that tastes even better because it's your birthday.",
+    "Have something yummy for me, okay?",
+    "I hope you get spoiled with all your favorite treats.",
+    "You know what would make today better? More snacks.",
+    "Enjoy every bite. Today's a good day to treat yourself.",
+    "I hope you get that one food you've been craving.",
+    "Birthday calories? Let's not worry about those today.",
+    "Make sure you save some cake for later!",
+    "You deserve a little something special today.",
+    "Have you had your birthday cake yet?",
+    "I hope your birthday meal is everything you wanted.",
+    "Go on, enjoy yourself. You don't turn a year older every day!",
+    "Good food, good company, and a birthday girl having fun.",
+    "Hope you get to enjoy all your favorite things today!"
   ],
 
   play: [
-    "That was fun. Again?",
-    "I needed to move around.",
-    "Let's try that one more time.",
-    "I like spending time with you.",
-    "Okay, that was actually pretty fun.",
-    "You almost got me that time.",
-    "I think I'm getting better at this.",
-    "One more round, then maybe a break.",
-    "I needed that little distraction.",
-    "We should do this more often.",
-    "That was a good way to spend some time.",
-    "I wasn't expecting that!",
-    "You're making this interesting.",
-    "I think I won that one. Probably.",
-    "Rematch?",
-    "My turn to choose the next activity.",
-    "I could do this all day.",
-    "That was better than doing nothing.",
-    "I didn't know I had that much energy.",
-    "Okay, I'm officially entertained.",
-    "Let's see if we can beat that next time.",
-    "I'm having a decent time here.",
-    "You make a pretty good playmate.",
-    "That was a close one.",
-    "I need a second to recover.",
-    "I was definitely not prepared for that.",
-    "We should try something different next.",
-    "Well, that was unexpected.",
-    "I'm glad we did that.",
-    "All right, what's next?"
+    "Happy birthday! Ready to play a little?",
+    "It's your special day. Let's do something fun!",
+    "Hey, birthday girl! Think you can beat your last score?",
+    "I hope you're having fun on your birthday!",
+    "Come on, let's make today a little more exciting.",
+    "You get to pick what we do next. Birthday privileges!",
+    "A little game before you get back to your birthday treats?",
+    "I hope your day has been full of smiles so far.",
+    "You're allowed to be a little silly today. Go ahead!",
+    "Let's make a fun little birthday memory.",
+    "How's your birthday going? Need a little entertainment?",
+    "No pressure to win. Just enjoy yourself!",
+    "I hope you get to do all the things you love today.",
+    "Come on, show me those birthday girl skills!",
+    "You deserve a break from all the birthday preparations.",
+    "Let's take a little break from opening presents and play.",
+    "One more round? Consider it a birthday bonus.",
+    "I hope someone makes you laugh really hard today.",
+    "You're doing great! Keep having fun.",
+    "Your birthday, your rules. What are we playing?",
+    "I hope today gives you plenty of happy memories.",
+    "Let's see if we can make you smile a little more.",
+    "You know what? You're pretty fun to hang out with.",
+    "A little game never hurt a birthday celebration.",
+    "Hey, don't forget to enjoy the moment!",
+    "I hope you're getting some time to do what you want today.",
+    "You're the birthday girl, so you get first pick!",
+    "Let's have some fun before you get distracted by cake again.",
+    "That was fun! I hope your birthday is just as enjoyable.",
+    "All right, birthday girl. What shall we do next?"
   ],
 
   sleep: [
-    "I'm going to rest for a while.",
-    "A short nap should help.",
-    "Wake me when it's time to eat.",
-    "I feel better after some rest.",
-    "Just five more minutes.",
-    "It's getting harder to keep my eyes open.",
-    "I think I'll stay here for a bit.",
-    "Today's been a long day.",
-    "A little quiet time sounds nice.",
-    "I'm not sleeping. Just resting my eyes.",
-    "This spot seems comfortable enough.",
-    "I'll be back after a quick nap.",
-    "My energy is running low.",
-    "I could really use some rest.",
-    "Don't mind me. I'm recharging.",
-    "It's peaceful here.",
-    "I might accidentally fall asleep.",
-    "Let me just get comfortable first.",
-    "I think I'll take it easy for now.",
-    "Even little pets need their breaks.",
-    "I'll deal with everything after my nap.",
-    "It's too comfortable to move.",
-    "I can barely keep my eyes open.",
-    "A quiet moment never hurts.",
-    "I wonder what I'll dream about.",
-    "Wake me up if something interesting happens.",
-    "I could use a little downtime.",
-    "Resting is surprisingly exhausting. Somehow.",
-    "I'll have more energy after this.",
-    "Okay, I'm officially off duty."
+    "Getting sleepy, birthday girl? Take a little rest.",
+    "I hope you get a good night's sleep after all the fun today.",
+    "Even birthday girls need a break sometimes.",
+    "Go rest for a bit. You can get back to celebrating later.",
+    "Don't stay up too late on your birthday!",
+    "I hope today hasn't been too tiring for you.",
+    "A little nap before the next birthday activity?",
+    "You deserve a peaceful moment to yourself.",
+    "Go get comfortable. You've earned a little downtime.",
+    "I hope you get to relax without worrying about anything today.",
+    "Close your eyes for a while. The cake can wait.",
+    "You don't have to be doing something every minute.",
+    "I hope you get a cozy, comfortable night tonight.",
+    "Rest up, birthday girl. There's always tomorrow.",
+    "It's okay to take things slow, even on your birthday.",
+    "I hope you get to end your day feeling happy and relaxed.",
+    "A busy birthday calls for a little rest.",
+    "Don't forget to take care of yourself, okay?",
+    "You deserve some quiet time after all the excitement.",
+    "Go recharge. I hope tomorrow is kind to you, too.",
+    "I hope your birthday ends on a peaceful note.",
+    "You don't have to make today perfect to enjoy it.",
+    "Get some rest before you start thinking about those presents again.",
+    "I hope you sleep with a smile on your face tonight.",
+    "Take a breath, relax, and enjoy the rest of your day.",
+    "You can put everything else aside for a little while.",
+    "I hope your birthday has been good to you.",
+    "Time to rest those feet after all that celebrating.",
+    "Take it easy, birthday girl. You deserve that.",
+    "Goodnight! I hope the coming year brings you lovely things."
   ],
 
   wash: [
-    "That feels much better.",
-    "I needed a proper wash.",
-    "All clean. That's a relief.",
-    "Can we keep the soap out of my eyes next time?",
-    "I feel a little fresher now."
+    "All clean! Now you're ready for more birthday fun.",
+    "A little freshening up for the birthday girl!",
+    "There we go. Feeling refreshed?",
+    "Looking good! Ready for your birthday plans?",
+    "I hope you get to pamper yourself a little today, too.",
+    "Fresh and ready for birthday pictures!",
+    "A little self-care on your special day never hurts.",
+    "There! Now go enjoy the rest of your birthday.",
+    "You deserve to feel comfortable and refreshed today.",
+    "All cleaned up. Got any birthday plans afterward?",
+    "Ready for a birthday dinner or a cozy night in?",
+    "Hope you're having a lovely day so far!",
+    "A quick refresh before you get back to celebrating.",
+    "You should take a little time for yourself today, too.",
+    "All freshened up! How's the birthday girl doing?",
+    "Feeling better? I hope you're enjoying your day.",
+    "Clean and comfy. That's one less thing to worry about.",
+    "I hope you get to relax and be pampered today.",
+    "There you go! Now, where's that birthday cake?",
+    "All set. Enjoy the rest of your special day!"
   ],
 
   pet: [
-    "That feels nice.",
-    "You can stay a little longer.",
-    "I'm getting used to you.",
-    "Thanks for being gentle.",
-    "Oh, hello again.",
-    "I don't mind that.",
-    "You have a pretty gentle touch.",
-    "That was nice. Do it again?",
-    "I'm comfortable here.",
-    "I was wondering when you'd show up.",
-    "You seem to be in a good mood.",
-    "I could get used to this treatment.",
-    "Not bad. Not bad at all.",
-    "You're pretty good at that.",
-    "I think I like this.",
-    "Okay, you've got my attention.",
-    "That's actually kind of relaxing.",
-    "I wasn't expecting company.",
-    "You can hang around if you want.",
-    "I don't have anything else planned.",
-    "This is a nice little break.",
-    "You don't have to stop just yet.",
-    "I'm not complaining.",
-    "Well, this is pleasant.",
-    "I think we're getting along.",
-    "You know, you're not so bad.",
-    "I was just sitting here anyway.",
-    "That made my day a little better.",
-    "I'll admit, I enjoy the attention.",
-    "All right, you can stay."
+    "Happy birthday, lovely girl! How's your day going?",
+    "Hey, birthday girl! I'm glad you're here.",
+    "You know, you deserve a really lovely day today.",
+    "Have you been enjoying your birthday so far?",
+    "I hope someone's making you feel special today.",
+    "Hey, don't forget to enjoy your own birthday!",
+    "I hope you get lots of reasons to smile today.",
+    "You're pretty wonderful, you know that?",
+    "Just checking in on the birthday girl.",
+    "I hope you're getting spoiled a little today.",
+    "You deserve to be celebrated. Happy birthday!",
+    "Hey, have you opened your presents yet?",
+    "I hope you get something you've been wishing for.",
+    "You seem like someone who deserves a little extra happiness.",
+    "I hope today reminds you how appreciated you are.",
+    "It's your birthday! You should be doing something you love.",
+    "I hope you get to spend time with people who make you happy.",
+    "You're allowed to make today all about yourself.",
+    "I hope your birthday is filled with little moments you'll remember.",
+    "Hey, lovely. I hope life's treating you kindly today.",
+    "I hope you get a birthday surprise you never saw coming.",
+    "You don't have to do anything big to enjoy your special day.",
+    "I hope you're being as kind to yourself as you are to others.",
+    "Another year older, another year of being wonderfully you.",
+    "Hey, birthday girl. Don't forget how far you've come.",
+    "I hope this next chapter brings you lots of good things.",
+    "You deserve happiness on ordinary days, too, you know.",
+    "I hope you get to laugh until your cheeks hurt today.",
+    "You don't need to be perfect to be someone worth celebrating.",
+    "I hope your birthday feels warm and full of good memories.",
+    "Hey, how about a little birthday smile?",
+    "I hope you get to do something just because it makes you happy.",
+    "You deserve people who remember the little things about you.",
+    "I hope your birthday wish comes true, whatever it may be.",
+    "You're pretty easy to appreciate, you know?",
+    "I hope someone gives you the biggest, warmest birthday hug.",
+    "Just a little reminder that you're worth celebrating.",
+    "I hope you get a break from your worries today.",
+    "You're allowed to feel happy about yourself and everything you've achieved.",
+    "Happy birthday! I'm rooting for you this year.",
+    "I hope you feel loved today, in all the little ways that count.",
+    "Hey, go enjoy your birthday. I'll be right here!",
+    "You deserve a day that makes you smile when you think back on it.",
+    "I hope the next year gives you more reasons to be excited.",
+    "You bring something good into the lives of the people around you.",
+    "Don't let anyone make you feel like you don't deserve a little celebration.",
+    "I hope today is a good reminder to appreciate yourself, too.",
+    "You're a pretty lovely person to spend time with.",
+    "Happy birthday, girl! I hope today is good to you.",
+    "All right, enough compliments for now. Go have some birthday fun!"
   ],
 
   idle: [
-    "Hi. What should we do today?",
-    "I'm ready when you are.",
-    "It's quiet here today.",
-    "I could eat something soon.",
-    "Oh, you're back.",
-    "I wonder what we'll do today.",
-    "Nothing much is happening right now.",
-    "Just hanging around.",
-    "It's a pretty calm day.",
-    "Got anything planned?",
-    "I'm open to suggestions.",
-    "I was just thinking about stuff.",
-    "Well, this is a nice place to sit.",
-    "I wonder what time it is.",
-    "I'm not bored. Not yet, anyway.",
-    "Something interesting should happen soon.",
-    "I'll just stay here for a while.",
+    "Just hanging out? That's fine.",
+    "It's pretty quiet right now.",
+    "I'll be here when you need me.",
+    "Taking a little break?",
+    "Nothing much happening, huh?",
+    "We can just sit here for a bit.",
+    "Hey. Just checking in.",
+    "Still there? No rush.",
     "It's nice to have a quiet moment.",
+    "You can come back whenever you want.",
     "I wonder what you're up to.",
-    "No plans, no problems.",
-    "I'm taking a break from doing absolutely nothing.",
-    "Today feels a little different.",
-    "I could use a bit of excitement.",
-    "Maybe we'll do something fun later.",
-    "I'm just enjoying the moment.",
-    "Nothing to report. Everything's normal.",
-    "I should probably get up soon.",
-    "Is it snack time yet?",
-    "I'll be here if you need me.",
-    "Another day, another tiny adventure.",
-    "I wonder what happens next.",
-    "It's not a bad day to do nothing.",
-    "I'm listening. What's up?",
-    "You don't have to do anything right now.",
-    "Just checking in. How's your day going?",
-    "I think I'll sit here a little longer.",
-    "Something tells me today's going to be interesting.",
-    "I'm here. That's something, right?",
-    "We can figure out what to do later.",
-    "For now, I think I'll just chill."
+    "I'm getting comfortable over here.",
+    "No need to hurry. I'm okay.",
+    "A little quiet time is nice sometimes.",
+    "I'll wait here for you."
   ]
 };
+// const dialogue = {
+//   feed: [
+//     "Thanks. I was getting hungry.",
+//     "That was good.",
+//     "Could I have a little more later?",
+//     "Food makes this a better day.",
+//     "Oh, just what I needed.",
+//     "I didn't realize how hungry I was.",
+//     "That hit the spot.",
+//     "Got any more of that?",
+//     "I could get used to this.",
+//     "Eating is probably my favorite activity.",
+//     "That was pretty good, actually.",
+//     "I was starting to think you'd forgotten.",
+//     "My stomach says thank you.",
+//     "Well, that was nice.",
+//     "A full stomach makes everything better.",
+//     "I appreciate the snack.",
+//     "You always seem to know when I'm hungry.",
+//     "I could use a little more, but this is fine.",
+//     "That should keep me going for a while.",
+//     "Food acquired. Life is good.",
+//     "I was just thinking about food.",
+//     "Now I can relax.",
+//     "That was exactly what I wanted.",
+//     "You came prepared, huh?",
+//     "Not bad. I'd give it a solid rating.",
+//     "I might need another snack later.",
+//     "Okay, I'm satisfied for now.",
+//     "This is a pretty good day already.",
+//     "I wonder what's on the menu next time.",
+//     "All right, time for a food coma."
+//   ],
+
+//   play: [
+//     "That was fun. Again?",
+//     "I needed to move around.",
+//     "Let's try that one more time.",
+//     "I like spending time with you.",
+//     "Okay, that was actually pretty fun.",
+//     "You almost got me that time.",
+//     "I think I'm getting better at this.",
+//     "One more round, then maybe a break.",
+//     "I needed that little distraction.",
+//     "We should do this more often.",
+//     "That was a good way to spend some time.",
+//     "I wasn't expecting that!",
+//     "You're making this interesting.",
+//     "I think I won that one. Probably.",
+//     "Rematch?",
+//     "My turn to choose the next activity.",
+//     "I could do this all day.",
+//     "That was better than doing nothing.",
+//     "I didn't know I had that much energy.",
+//     "Okay, I'm officially entertained.",
+//     "Let's see if we can beat that next time.",
+//     "I'm having a decent time here.",
+//     "You make a pretty good playmate.",
+//     "That was a close one.",
+//     "I need a second to recover.",
+//     "I was definitely not prepared for that.",
+//     "We should try something different next.",
+//     "Well, that was unexpected.",
+//     "I'm glad we did that.",
+//     "All right, what's next?"
+//   ],
+
+//   sleep: [
+//     "I'm going to rest for a while.",
+//     "A short nap should help.",
+//     "Wake me when it's time to eat.",
+//     "I feel better after some rest.",
+//     "Just five more minutes.",
+//     "It's getting harder to keep my eyes open.",
+//     "I think I'll stay here for a bit.",
+//     "Today's been a long day.",
+//     "A little quiet time sounds nice.",
+//     "I'm not sleeping. Just resting my eyes.",
+//     "This spot seems comfortable enough.",
+//     "I'll be back after a quick nap.",
+//     "My energy is running low.",
+//     "I could really use some rest.",
+//     "Don't mind me. I'm recharging.",
+//     "It's peaceful here.",
+//     "I might accidentally fall asleep.",
+//     "Let me just get comfortable first.",
+//     "I think I'll take it easy for now.",
+//     "Even little pets need their breaks.",
+//     "I'll deal with everything after my nap.",
+//     "It's too comfortable to move.",
+//     "I can barely keep my eyes open.",
+//     "A quiet moment never hurts.",
+//     "I wonder what I'll dream about.",
+//     "Wake me up if something interesting happens.",
+//     "I could use a little downtime.",
+//     "Resting is surprisingly exhausting. Somehow.",
+//     "I'll have more energy after this.",
+//     "Okay, I'm officially off duty."
+//   ],
+
+//   wash: [
+//     "That feels much better.",
+//     "I needed a proper wash.",
+//     "All clean. That's a relief.",
+//     "Can we keep the soap out of my eyes next time?",
+//     "I feel a little fresher now."
+//   ],
+
+//   pet: [
+//     "That feels nice.",
+//     "You can stay a little longer.",
+//     "I'm getting used to you.",
+//     "Thanks for being gentle.",
+//     "Oh, hello again.",
+//     "I don't mind that.",
+//     "You have a pretty gentle touch.",
+//     "That was nice. Do it again?",
+//     "I'm comfortable here.",
+//     "I was wondering when you'd show up.",
+//     "You seem to be in a good mood.",
+//     "I could get used to this treatment.",
+//     "Not bad. Not bad at all.",
+//     "You're pretty good at that.",
+//     "I think I like this.",
+//     "Okay, you've got my attention.",
+//     "That's actually kind of relaxing.",
+//     "I wasn't expecting company.",
+//     "You can hang around if you want.",
+//     "I don't have anything else planned.",
+//     "This is a nice little break.",
+//     "You don't have to stop just yet.",
+//     "I'm not complaining.",
+//     "Well, this is pleasant.",
+//     "I think we're getting along.",
+//     "You know, you're not so bad.",
+//     "I was just sitting here anyway.",
+//     "That made my day a little better.",
+//     "I'll admit, I enjoy the attention.",
+//     "All right, you can stay."
+//   ],
+
+//   idle: [
+//     "Hi. What should we do today?",
+//     "I'm ready when you are.",
+//     "It's quiet here today.",
+//     "I could eat something soon.",
+//     "Oh, you're back.",
+//     "I wonder what we'll do today.",
+//     "Nothing much is happening right now.",
+//     "Just hanging around.",
+//     "It's a pretty calm day.",
+//     "Got anything planned?",
+//     "I'm open to suggestions.",
+//     "I was just thinking about stuff.",
+//     "Well, this is a nice place to sit.",
+//     "I wonder what time it is.",
+//     "I'm not bored. Not yet, anyway.",
+//     "Something interesting should happen soon.",
+//     "I'll just stay here for a while.",
+//     "It's nice to have a quiet moment.",
+//     "I wonder what you're up to.",
+//     "No plans, no problems.",
+//     "I'm taking a break from doing absolutely nothing.",
+//     "Today feels a little different.",
+//     "I could use a bit of excitement.",
+//     "Maybe we'll do something fun later.",
+//     "I'm just enjoying the moment.",
+//     "Nothing to report. Everything's normal.",
+//     "I should probably get up soon.",
+//     "Is it snack time yet?",
+//     "I'll be here if you need me.",
+//     "Another day, another tiny adventure.",
+//     "I wonder what happens next.",
+//     "It's not a bad day to do nothing.",
+//     "I'm listening. What's up?",
+//     "You don't have to do anything right now.",
+//     "Just checking in. How's your day going?",
+//     "I think I'll sit here a little longer.",
+//     "Something tells me today's going to be interesting.",
+//     "I'm here. That's something, right?",
+//     "We can figure out what to do later.",
+//     "For now, I think I'll just chill."
+//   ]
+// };
 
 function clamp(value) { return Math.max(0, Math.min(100, value)); }
 function randomItem(items) { return items[Math.floor(Math.random() * items.length)]; }
@@ -330,6 +526,36 @@ function showSpeech(message) {
   bubble.animate([{ transform: "translateX(-50%) scale(.85)", opacity: .5 }, { transform: "translateX(-50%) scale(1)", opacity: 1 }], { duration: 180, easing: "ease-out" });
 }
 
+function clearIdleDialogueTimer() {
+  if (idleDialogueTimer !== null) {
+    clearTimeout(idleDialogueTimer);
+    idleDialogueTimer = null;
+  }
+}
+
+function scheduleIdleDialogue() {
+  clearIdleDialogueTimer();
+  if (document.hidden) return;
+
+  // Wait a random 5–7 seconds after the last interaction before speaking.
+  const delay = 5000 + Math.floor(Math.random() * 2001);
+  idleDialogueTimer = window.setTimeout(() => {
+    idleDialogueTimer = null;
+    if (document.hidden) return;
+
+    // Keep idle chatter from interrupting an action or a recent message.
+    if (Date.now() - lastUserActivityAt >= delay - 250) {
+      showSpeech(randomItem(dialogue.idle));
+    }
+    scheduleIdleDialogue();
+  }, delay);
+}
+
+function registerUserActivity() {
+  lastUserActivityAt = Date.now();
+  scheduleIdleDialogue();
+}
+
 function chirp() {
   if (!soundEnabled) return;
   try {
@@ -430,6 +656,7 @@ function refreshDailyRoutine() {
 }
 
 function doAction(action) {
+  registerUserActivity();
   applyNeedsDecay();
   refreshDailyRoutine();
   const now = Date.now();
@@ -446,6 +673,10 @@ function doAction(action) {
 
   pet.classList.remove("sleeping", "happy", "playing");
   $("scene").classList.remove("sleeping");
+  if (petAnimationTimer !== null) {
+    clearTimeout(petAnimationTimer);
+    petAnimationTimer = null;
+  }
   const responses = dialogue[action];
   let actionSucceeded = true;
 
@@ -531,6 +762,15 @@ function doAction(action) {
     state.celebratedBirthday = true;
     setTimeout(() => openModal("🎉", "??? unlocked", `You and ${state.name} reached 20,000 friendship. This took serious dedication. The ??? is now available.`), 350);
   }
+  // Action poses are temporary. Return Cinder to the default bobbing idle
+  // animation after the reaction finishes, including after sleeping.
+  if (petAnimationTimer !== null) clearTimeout(petAnimationTimer);
+  petAnimationTimer = window.setTimeout(() => {
+    pet.classList.remove("sleeping", "happy", "playing");
+    $("scene").classList.remove("sleeping");
+    petAnimationTimer = null;
+  }, 5000);
+
   chirp();
   render();
   save();
@@ -571,6 +811,8 @@ function load() {
   state.lastNeedsUpdate = Date.now();
   render();
   showSpeech(randomItem(dialogue.idle));
+  lastUserActivityAt = Date.now();
+  scheduleIdleDialogue();
   startNeedsClock();
   save();
 }
@@ -604,6 +846,18 @@ $("modalBackdrop").addEventListener("click", (event) => {
 });
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeModal();
+});
+
+// User activity postpones idle chatter; hidden tabs resume with a fresh delay.
+["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+  document.addEventListener(eventName, registerUserActivity, { passive: true });
+});
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearIdleDialogueTimer();
+  } else {
+    registerUserActivity();
+  }
 });
 
 load();
