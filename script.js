@@ -233,7 +233,7 @@ document.querySelectorAll("[data-action]").forEach((button) => {
 $("surpriseButton").addEventListener("click", () => {
   if (state.friendship >= FRIENDSHIP_GOAL) {
     state.surpriseSeen = true;
-    openModal("🎂", "Happy Birthday", `I hope this year brings you so much happiness, love, and beautiful moments to cherish. Thank you for spending time with Cinder and for being a part of their life. It truly means a lot, and I hope your special day is filled with the same warmth and kindness you share with others. You deserve all the wonderful things life has to offer. Have the loveliest day!`);
+    openModal("🎂", "Happy Birthday", `I hope this year brings you so much happiness and beautiful moments to cherish. Thank you for spending time with Cinder and for being a part of their life. It truly means a lot, and I hope your special day is filled with the same warmth and gentleness you share with others. You deserve all the wonderful things life has to offer. Have the loveliest day!`);
     save();
   }
 });
