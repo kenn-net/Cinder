@@ -1,18 +1,32 @@
 const FRIENDSHIP_GOAL = 20000;
 const ACTION_COOLDOWN_MS = 2000;
+const DAILY_CARE_TARGET = 5;
+const HUNGER_DECAY_MS = 4 * 60 * 1000;
+const HAPPINESS_DECAY_MS = 6 * 60 * 1000;
+const ENERGY_DECAY_MS = 5 * 60 * 1000;
+const CLEANLINESS_DECAY_MS = 12 * 60 * 1000;
+const NEEDS_TICK_MS = 30 * 1000;
 let nextActionAt = 0;
+let needsTimer = null;
 
 const defaults = {
   name: "Cinder",
   hunger: 65,
   happiness: 55,
   energy: 75,
+  cleanliness: 80,
+  health: 100,
   friendship: 0,
   interacted: false,
   surpriseSeen: false,
   actions: 0,
   celebratedFriend: false,
-  celebratedBirthday: false
+  celebratedBirthday: false,
+  lastNeedsUpdate: Date.now(),
+  dailyCareDate: (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; })(),
+  dailyCareCount: 0,
+  careStreak: 0,
+  lastCareDate: ""
 };
 
 let state = { ...defaults };
@@ -122,6 +136,14 @@ const dialogue = {
     "Okay, I'm officially off duty."
   ],
 
+  wash: [
+    "That feels much better.",
+    "I needed a proper wash.",
+    "All clean. That's a relief.",
+    "Can we keep the soap out of my eyes next time?",
+    "I feel a little fresher now."
+  ],
+
   pet: [
     "That feels nice.",
     "You can stay a little longer.",
@@ -203,20 +225,57 @@ function clamp(value) { return Math.max(0, Math.min(100, value)); }
 function randomItem(items) { return items[Math.floor(Math.random() * items.length)]; }
 
 function render() {
-  ["hunger", "happiness", "energy", "friendship"].forEach((key) => {
-    $(key + "Text").textContent = state[key];
+  ["hunger", "happiness", "energy", "cleanliness", "health", "friendship"].forEach((key) => {
+    $(key + "Text").textContent = Math.floor(state[key]);
     $(key + "Bar").style.width = state[key] + "%";
   });
   $("petName").textContent = state.name;
   const friendshipPercent = Math.min(100, (state.friendship / FRIENDSHIP_GOAL) * 100);
   $("friendshipBar").style.width = friendshipPercent + "%";
+  $("friendshipBar").setAttribute("aria-label", `${Math.floor(state.friendship)} of ${FRIENDSHIP_GOAL} friendship`);
   $("surpriseProgress").style.width = friendshipPercent + "%";
   $("surpriseLabel").textContent = `${Math.floor(state.friendship).toLocaleString()} / ${FRIENDSHIP_GOAL.toLocaleString()} friendship`;
   $("surpriseButton").disabled = state.friendship < FRIENDSHIP_GOAL;
-  $("surpriseButton").textContent = state.friendship >= FRIENDSHIP_GOAL ? "Open birthday surprise" : "Reach 20,000 friendship to unlock";
+  $("surpriseButton").textContent = state.friendship >= FRIENDSHIP_GOAL
+    ? (state.surpriseSeen ? "View birthday message again" : "Open birthday surprise")
+    : "Reach 20,000 friendship to unlock";
   $("surpriseText").textContent = state.friendship >= FRIENDSHIP_GOAL
-    ? "You reached the final milestone. The birthday surprise is ready."
+    ? (state.surpriseSeen
+      ? "The birthday message is unlocked. You can open it again whenever you like."
+      : "You reached the final milestone. The birthday surprise is ready.")
     : "This is a long-term goal: reach 20,000 friendship. Actions have a short cooldown, and Cinder's needs require regular care.";
+  const needs = [state.hunger, state.happiness, state.energy, state.cleanliness, state.health];
+  const lowestNeed = Math.min(...needs);
+  const statusText = $("needsStatusText");
+  const statusBox = $("needsStatus");
+  statusBox.classList.remove("needs-good", "needs-warning", "needs-critical");
+  if (lowestNeed <= 15) {
+    statusBox.classList.add("needs-critical");
+    statusText.textContent = state.health <= 15
+      ? `${state.name}'s health is very low. Take care of their basic needs.`
+      : state.hunger <= 15
+        ? `${state.name} is very hungry. Please feed them soon.`
+        : state.energy <= 15
+          ? `${state.name} is exhausted. A rest would help.`
+          : state.cleanliness <= 15
+            ? `${state.name} needs a wash.`
+            : `${state.name} seems down. Spend a little time caring for them.`;
+  } else if (lowestNeed <= 35) {
+    statusBox.classList.add("needs-warning");
+    statusText.textContent = state.hunger <= 35
+      ? `${state.name} is getting hungry.`
+      : state.energy <= 35
+        ? `${state.name} is getting tired.`
+        : state.cleanliness <= 35
+          ? `${state.name} could use a wash.`
+          : state.health <= 35
+            ? `${state.name} isn't feeling their best.`
+            : `${state.name} could use some attention.`;
+  } else {
+    statusBox.classList.add("needs-good");
+    statusText.textContent = `${state.name} is doing okay. Needs slowly decline over time.`;
+  }
+
   $("petTitle").textContent = state.friendship >= 20000
     ? "Level 10 · Trusted Companion"
     : state.friendship >= 15000
@@ -236,6 +295,13 @@ function render() {
                   : state.friendship >= 100
                     ? "Level 2 · Getting Acquainted"
                     : "Level 1 · New Companion";
+
+  $("dailyCareText").textContent = `${Math.min(state.dailyCareCount || 0, DAILY_CARE_TARGET)} / ${DAILY_CARE_TARGET}`;
+  $("dailyCareBar").style.width = `${Math.min(100, ((state.dailyCareCount || 0) / DAILY_CARE_TARGET) * 100)}%`;
+  $("streakText").textContent = `Care streak: ${state.careStreak || 0} day${state.careStreak === 1 ? "" : "s"}`;
+  $("routineText").textContent = (state.dailyCareCount || 0) >= DAILY_CARE_TARGET
+    ? "Daily care goal complete. Keep Cinder comfortable until tomorrow."
+    : "Complete 5 care actions today. A new day starts a fresh routine.";
 
   setAchievement("achFirst", state.interacted);
   setAchievement("achActions", state.actions >= 100);
@@ -285,7 +351,87 @@ function chirp() {
   } catch (_) {}
 }
 
+function applyNeedsDecay(now = Date.now()) {
+  const last = Number(state.lastNeedsUpdate) || now;
+  // Cap offline time at seven days to protect saves from large clock jumps.
+  const elapsed = Math.max(0, Math.min(now - last, 7 * 24 * 60 * 60 * 1000));
+  if (elapsed <= 0) {
+    state.lastNeedsUpdate = now;
+    return;
+  }
+
+  const needRules = [
+    { key: "hunger", decayMs: HUNGER_DECAY_MS },
+    { key: "happiness", decayMs: HAPPINESS_DECAY_MS },
+    { key: "energy", decayMs: ENERGY_DECAY_MS },
+    { key: "cleanliness", decayMs: CLEANLINESS_DECAY_MS }
+  ];
+  let totalCriticalNeedMs = 0;
+  let allStartedHealthy = true;
+  let healthyRecoveryMs = elapsed;
+
+  needRules.forEach(({ key, decayMs }) => {
+    const before = clamp(Number(state[key]) || 0);
+    // A need contributes to health loss only for the part of the interval
+    // during which it was actually at or below the critical threshold.
+    const timeToCritical = before <= 10 ? 0 : (before - 10) * decayMs;
+    totalCriticalNeedMs += Math.max(0, elapsed - timeToCritical);
+    if (before < 60) {
+      allStartedHealthy = false;
+    } else {
+      healthyRecoveryMs = Math.min(healthyRecoveryMs, (before - 60) * decayMs);
+    }
+    state[key] = clamp(before - elapsed / decayMs);
+  });
+
+  const hourMs = 60 * 60 * 1000;
+  state.health = clamp(state.health - (totalCriticalNeedMs / hourMs) * 2);
+
+  // Recover only for the portion of the interval when all basic needs stayed at 60+.
+  if (allStartedHealthy && healthyRecoveryMs > 0) {
+    state.health = clamp(state.health + (healthyRecoveryMs / hourMs) * 0.5);
+  }
+
+  state.lastNeedsUpdate = now;
+}
+
+function startNeedsClock() {
+  if (needsTimer) clearInterval(needsTimer);
+  needsTimer = setInterval(() => {
+    applyNeedsDecay();
+    refreshDailyRoutine();
+    render();
+    save();
+  }, NEEDS_TICK_MS);
+}
+
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function refreshDailyRoutine() {
+  const today = localDateKey();
+  if (state.dailyCareDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const wasYesterday = state.dailyCareDate === localDateKey(yesterday);
+    if (wasYesterday && (state.dailyCareCount || 0) >= DAILY_CARE_TARGET) {
+      state.careStreak = (state.careStreak || 0) + 1;
+    } else {
+      // An incomplete day or a missed day breaks the consecutive-day streak.
+      state.careStreak = 0;
+    }
+    state.dailyCareDate = today;
+    state.dailyCareCount = 0;
+  }
+}
+
 function doAction(action) {
+  applyNeedsDecay();
+  refreshDailyRoutine();
   const now = Date.now();
   if (now < nextActionAt) {
     const seconds = Math.ceil((nextActionAt - now) / 1000);
@@ -298,40 +444,40 @@ function doAction(action) {
     document.querySelectorAll("[data-action]").forEach((button) => { button.disabled = false; });
   }, ACTION_COOLDOWN_MS);
 
-  state.interacted = true;
-  state.actions += 1;
   pet.classList.remove("sleeping", "happy", "playing");
+  $("scene").classList.remove("sleeping");
   const responses = dialogue[action];
-
-  if (action !== "sleep") {
-    state.hunger = clamp(state.hunger - 2);
-    state.energy = clamp(state.energy - 1);
-    state.happiness = clamp(state.happiness - 1);
-  }
+  let actionSucceeded = true;
 
   if (action === "feed") {
     if (state.hunger >= 95) {
+      actionSucceeded = false;
       showSpeech("I'm full for now.");
       note.textContent = `${state.name} is too full. Try another activity or wait for hunger to drop.`;
     } else {
-      state.hunger = clamp(state.hunger + 18);
+      state.hunger = clamp(state.hunger + 24);
       state.happiness = clamp(state.happiness + 2);
-      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + 1);
+      const gain = state.happiness < 15 || state.energy < 10 ? 0 : 1;
+      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       showSpeech(randomItem(responses));
-      note.textContent = `You fed ${state.name}. +1 friendship. Small gains add up over time.`;
+      note.textContent = gain
+        ? `You fed ${state.name}. +1 friendship. Needs keep declining as time passes.`
+        : `You fed ${state.name}. Cinder needs more rest or comfort before this builds friendship.`;
       pet.classList.add("happy");
     }
   } else if (action === "play") {
     if (state.energy < 20 || state.hunger < 10) {
+      actionSucceeded = false;
       showSpeech(state.energy < 20 ? "I need to rest before playing." : "I need something to eat first.");
       note.textContent = `${state.name} needs more energy and food before playing.`;
     } else {
-      state.happiness = clamp(state.happiness + 12);
-      state.energy = clamp(state.energy - 18);
-      state.hunger = clamp(state.hunger - 10);
-      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + 2);
+      state.happiness = clamp(state.happiness + 15);
+      state.energy = clamp(state.energy - 20);
+      state.hunger = clamp(state.hunger - 12);
+      const gain = state.hunger < 15 || state.energy < 15 ? 1 : 2;
+      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       showSpeech(randomItem(responses));
-      note.textContent = `You played with ${state.name}. +2 friendship, but it used energy and increased hunger.`;
+      note.textContent = `You played with ${state.name}. +${gain} friendship, but it used energy and increased hunger.`;
       pet.classList.add("playing");
     }
   } else if (action === "sleep") {
@@ -341,17 +487,40 @@ function doAction(action) {
     showSpeech(randomItem(responses));
     note.textContent = `${state.name} rested. Energy recovered, but hunger and happiness still need attention.`;
     pet.classList.add("sleeping");
+    $("scene").classList.add("sleeping");
   } else if (action === "pet") {
     if (state.happiness < 5) {
+      actionSucceeded = false;
       showSpeech("I need a little time to feel better.");
       note.textContent = `${state.name} is having a rough moment. Try feeding or resting first.`;
     } else {
-      state.happiness = clamp(state.happiness + 4);
-      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + 1);
+      state.happiness = clamp(state.happiness + 7);
+      const gain = state.energy < 10 || state.hunger < 10 ? 0 : 1;
+      state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       showSpeech(randomItem(responses));
-      note.textContent = `You spent a quiet moment with ${state.name}. +1 friendship.`;
+      note.textContent = gain
+        ? `You spent a quiet moment with ${state.name}. +1 friendship.`
+        : `You comforted ${state.name}, but they need food or rest before friendship can grow.`;
       pet.classList.add("happy");
     }
+  }
+
+  if (actionSucceeded) {
+    // Only successful care actions count toward achievements and daily routines.
+    state.interacted = true;
+    state.actions += 1;
+    state.dailyCareCount = Math.min(DAILY_CARE_TARGET, (state.dailyCareCount || 0) + 1);
+    state.lastCareDate = localDateKey();
+  }
+
+  if (action === "wash") {
+    state.cleanliness = clamp(state.cleanliness + 45);
+    state.happiness = clamp(state.happiness + 2);
+    const gain = state.health < 10 || state.hunger < 10 ? 0 : 1;
+    state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
+    showSpeech(randomItem(responses));
+    note.textContent = `You cleaned ${state.name}. Cleanliness restored${gain ? " and +1 friendship" : ""}.`;
+    pet.classList.add("happy");
   }
 
   if (state.friendship >= 2000 && !state.celebratedFriend) {
@@ -368,7 +537,10 @@ function doAction(action) {
 }
 
 function save() {
-  try { localStorage.setItem("friendpet-save-v2", JSON.stringify(state)); } catch (_) {}
+  try {
+    state.lastNeedsUpdate = Date.now();
+    localStorage.setItem("friendpet-save-v2", JSON.stringify(state));
+  } catch (_) {}
 }
 
 function load() {
@@ -378,11 +550,29 @@ function load() {
       state = { ...defaults, ...JSON.parse(saved) };
       state.friendship = Math.min(FRIENDSHIP_GOAL, Math.max(0, Number(state.friendship) || 0));
       state.actions = Math.max(0, Number(state.actions) || 0);
+      state.hunger = clamp(Number(state.hunger) || 0);
+      state.happiness = clamp(Number(state.happiness) || 0);
+      state.energy = clamp(Number(state.energy) || 0);
+      state.cleanliness = clamp(Number(state.cleanliness ?? defaults.cleanliness));
+      state.health = clamp(Number(state.health ?? defaults.health));
+      state.dailyCareCount = Math.max(0, Number(state.dailyCareCount) || 0);
+      state.careStreak = Math.max(0, Number(state.careStreak) || 0);
+      if (!Number.isFinite(Number(state.lastNeedsUpdate))) state.lastNeedsUpdate = Date.now();
+      const lastVisit = Number(state.lastNeedsUpdate);
+      applyNeedsDecay(Date.now());
+      const awayMinutes = Math.max(0, Math.floor((Date.now() - lastVisit) / 60000));
+      if (awayMinutes >= 2) {
+        note.textContent = `Cinder's needs changed while you were away for ${awayMinutes.toLocaleString()} minutes.`;
+      }
     }
     if (!saved) state.name = "Cinder";
   } catch (_) { state = { ...defaults }; }
+  refreshDailyRoutine();
+  state.lastNeedsUpdate = Date.now();
   render();
   showSpeech(randomItem(dialogue.idle));
+  startNeedsClock();
+  save();
 }
 
 function openModal(icon, title, message) {
@@ -403,6 +593,7 @@ $("surpriseButton").addEventListener("click", () => {
   if (state.friendship >= FRIENDSHIP_GOAL) {
     state.surpriseSeen = true;
     openModal("🎂", "Happy Birthday", `I hope this year brings you so much happiness and beautiful moments to cherish. Thank you for spending time with Cinder and for being a part of their life. It truly means a lot, and I hope your special day is filled with the same warmth and gentleness you share with others. You deserve all the wonderful things life has to offer. Have the loveliest day!`);
+    render();
     save();
   }
 });

@@ -58,9 +58,21 @@
           <div class="meter"><div class="meter-fill energy-fill" id="energyBar"></div></div>
         </div>
         <div class="stat">
-          <div class="stat-heading"><span>🤝 Friendship</span><strong id="friendshipText">20</strong></div>
+          <div class="stat-heading"><span>🧼 Cleanliness</span><strong id="cleanlinessText">80</strong></div>
+          <div class="meter"><div class="meter-fill cleanliness-fill" id="cleanlinessBar"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-heading"><span>❤️ Health</span><strong id="healthText">100</strong></div>
+          <div class="meter"><div class="meter-fill health-fill" id="healthBar"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-heading"><span>🤝 Friendship</span><strong id="friendshipText">0</strong></div>
           <div class="meter"><div class="meter-fill friendship-fill" id="friendshipBar"></div></div>
         </div>
+      </div>
+      <div class="needs-status" id="needsStatus" aria-live="polite">
+        <span class="needs-status-dot"></span>
+        <span id="needsStatusText">Cinder is doing okay.</span>
       </div>
 
       <div class="actions">
@@ -68,8 +80,9 @@
         <button class="action-button play" data-action="play"><span>🧶</span><b>Play</b><small>Let's go!</small></button>
         <button class="action-button sleep" data-action="sleep"><span>💤</span><b>Sleep</b><small>Recharge</small></button>
         <button class="action-button pet-action" data-action="pet"><span>✋</span><b>Pet</b><small>Head pats</small></button>
+        <button class="action-button wash" data-action="wash"><span>🧼</span><b>Wash</b><small>Freshen up</small></button>
       </div>
-      <p class="action-note" id="actionNote" aria-live="polite">Tip: spending time together builds friendship.</p>
+      <p class="action-note" id="actionNote" aria-live="polite">Cinder’s needs change with real time—even while you’re away. Keep them fed, rested, clean, and happy.</p>
     </section>
 
     <section class="bottom-grid">
@@ -88,11 +101,18 @@
           <div class="achievement locked" id="achBirthday"><span>🎂</span><div><b>???</b><small>Reach 20,000 friendship</small></div><em>LOCKED</em></div>
         </div>
       </article>
+      <article class="mini-card routine-card">
+        <div class="card-heading"><span>📅</span><h3>Daily Routine</h3></div>
+        <p id="routineText">Care for Cinder each day to build a steady routine.</p>
+        <div class="routine-row"><span>Today's care</span><strong id="dailyCareText">0 / 5</strong></div>
+        <div class="routine-meter"><div id="dailyCareBar"></div></div>
+        <small id="streakText">Care streak: 0 days</small>
+      </article>
       <article class="mini-card surprise-card">
         <div class="card-heading"><span>🎁</span><h3>???</h3></div>
         <p id="surpriseText">Build friendship through regular care and activities. The ??? requires 20,000 friendship. Progress is deliberately slow.</p>
         <div class="surprise-progress"><div id="surpriseProgress"></div></div>
-        <small id="surpriseLabel">5 / 20,000 friendship</small>
+        <small id="surpriseLabel">0 / 20,000 friendship</small>
         <button id="surpriseButton" class="surprise-button" disabled>Reach 20,000 friendship to unlock</button>
       </article>
     </section>
