@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#fff2d8" />
+  <title>Cinder</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="pet-card" aria-label="Your virtual pet">
+      <div class="scene" id="scene">
+        <div class="sun"></div>
+        <div class="cloud cloud-one"></div>
+        <div class="cloud cloud-two"></div>
+        <div class="sparkle sparkle-one">✦</div>
+        <div class="sparkle sparkle-two">✧</div>
+        <div class="sparkle sparkle-three">✦</div>
+        <div class="speech-bubble" id="speechBubble">Oh. Hello there.</div>
+        <div class="pet" id="pet" role="img" aria-label="A little white bear">
+          <div class="ear ear-left"></div><div class="ear ear-right"></div>
+          <div class="body"></div>
+          <div class="head">
+            <div class="muzzle"></div>
+            <div class="eye eye-left"></div><div class="eye eye-right"></div>
+            <div class="cheek cheek-left"></div><div class="cheek cheek-right"></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+          </div>
+          <div class="tail"></div>
+          <div class="paw paw-left"></div><div class="paw paw-right"></div>
+        </div>
+        <div class="ground-shadow"></div>
+        <div class="grass grass-one"></div><div class="grass grass-two"></div>
+        <div class="scene-label">CINDER ROOM</div>
+      </div>
+
+      <div class="pet-info">
+        <div>
+          <p class="eyebrow">CURRENT RESIDENT</p>
+          <h3 id="petName">Cinder</h3>
+          <p class="pet-title" id="petTitle">Level 1 · New Companion</p>
+        </div>
+      </div>
+
+      <div class="stats" aria-label="Pet stats">
+        <div class="stat">
+          <div class="stat-heading"><span>🍎 Hunger</span><strong id="hungerText">65</strong></div>
+          <div class="meter"><div class="meter-fill hunger-fill" id="hungerBar"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-heading"><span>☀️ Happiness</span><strong id="happinessText">55</strong></div>
+          <div class="meter"><div class="meter-fill happiness-fill" id="happinessBar"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-heading"><span>⚡ Energy</span><strong id="energyText">75</strong></div>
+          <div class="meter"><div class="meter-fill energy-fill" id="energyBar"></div></div>
+        </div>
+        <div class="stat">
+          <div class="stat-heading"><span>🤝 Friendship</span><strong id="friendshipText">20</strong></div>
+          <div class="meter"><div class="meter-fill friendship-fill" id="friendshipBar"></div></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="action-button feed" data-action="feed"><span>🍎</span><b>Feed</b><small>Yum yum</small></button>
+        <button class="action-button play" data-action="play"><span>🧶</span><b>Play</b><small>Let's go!</small></button>
+        <button class="action-button sleep" data-action="sleep"><span>💤</span><b>Sleep</b><small>Recharge</small></button>
+        <button class="action-button pet-action" data-action="pet"><span>✋</span><b>Pet</b><small>Head pats</small></button>
+      </div>
+      <p class="action-note" id="actionNote" aria-live="polite">Tip: spending time together builds friendship.</p>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="mini-card">
+        <div class="card-heading"><span>🏆</span><h3>Achievements</h3></div>
+        <div class="achievement-list" id="achievementList">
+          <div class="achievement locked" id="achFirst"><span>1</span><div><b>First Contact</b><small>Interact with Cinder</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achActions"><span>2</span><div><b>Getting Into a Routine</b><small>Complete 100 activities</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achCareful"><span>3</span><div><b>Reliable Caregiver</b><small>Complete 500 activities</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achGrinder"><span>4</span><div><b>Part of the Routine</b><small>Complete 1,500 activities</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achVeteran"><span>5</span><div><b>Long-Term Companion</b><small>Complete 3,000 activities</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achClose"><span>6</span><div><b>Getting Closer</b><small>Reach 500 friendship</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achFriend"><span>7</span><div><b>Good Friends</b><small>Reach 2,000 friendship</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achTrusted"><span>8</span><div><b>Trusted Companion</b><small>Reach 7,500 friendship</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achDedicated"><span>9</span><div><b>Unusually Dedicated</b><small>Reach 15,000 friendship</small></div><em>LOCKED</em></div>
+          <div class="achievement locked" id="achBirthday"><span>🎂</span><div><b>???</b><small>Reach 20,000 friendship</small></div><em>LOCKED</em></div>
+        </div>
+      </article>
+      <article class="mini-card surprise-card">
+        <div class="card-heading"><span>🎁</span><h3>???</h3></div>
+        <p id="surpriseText">Build friendship through regular care and activities. The ??? requires 20,000 friendship. Progress is deliberately slow.</p>
+        <div class="surprise-progress"><div id="surpriseProgress"></div></div>
+        <small id="surpriseLabel">5 / 20,000 friendship</small>
+        <button id="surpriseButton" class="surprise-button" disabled>Reach 20,000 friendship to unlock</button>
+      </article>
+    </section>
+
+    <footer>A gift for an adorable friend</footer>
+  </main>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div class="modal-icon" id="modalIcon">🎂</div>
+      <p class="eyebrow">CINDER MESSAGE</p>
+      <h2 id="modalTitle">Birthday unlocked!</h2>
+      <p id="modalMessage">You have spent a lot of time together.</p>
+      <button class="primary-button" id="modalOkay">Continue</button>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
