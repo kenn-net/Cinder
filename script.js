@@ -865,7 +865,7 @@ function showRandomEvent() {
     const title = document.createElement('strong'); title.textContent = choice.label;
     const detail = document.createElement('small');
     const friendshipReward = typeof choice.effects?.friendship === 'number' ? choice.effects.friendship : 1;
-    detail.textContent = `${choice.detail} · Friendship +${friendshipReward}`;
+    detail.textContent = `${choice.detail}`;
     button.append(title, detail);
     button.addEventListener('click', () => resolveRandomEvent(index), { once: true });
     choices.appendChild(button);
@@ -903,7 +903,7 @@ function resolveRandomEvent(index) {
   $('eventResultIcon').textContent = event.icon || '☕';
   $('eventResultTitle').textContent = choice.label;
   const friendshipGained = Math.max(0, Number(state.friendship) - friendshipBefore);
-  $('eventResultMessage').textContent = `${result}${friendshipGained > 0 ? ` (+${friendshipGained} friendship)` : ''}`;
+  $('eventResultMessage').textContent = `${result}`;
   $('eventResultBackdrop').hidden = false;
   lastUserActivityAt = Date.now();
   render();
