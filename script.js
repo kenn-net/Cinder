@@ -11,7 +11,6 @@ let needsTimer = null;
 let idleDialogueTimer = null;
 let petAnimationTimer = null;
 let lastUserActivityAt = Date.now();
-let lastIdleDialogueLine = "";
 
 const defaults = {
   name: "Cinder",
@@ -185,9 +184,204 @@ const dialogue = {
     "That made my day a little better.",
     "I'll admit, I enjoy the attention.",
     "All right, you can stay."
+  ],
+
+  idle: [
+    "Just hanging out? That's fine.",
+    "It's pretty quiet right now.",
+    "I'll be here when you need me.",
+    "Taking a little break?",
+    "Nothing much happening, huh?",
+    "We can just sit here for a bit.",
+    "Hey. Just checking in.",
+    "Still there? No rush.",
+    "It's nice to have a quiet moment.",
+    "You can come back whenever you want.",
+    "I wonder what you're up to.",
+    "I'm getting comfortable over here.",
+    "No need to hurry. I'm okay.",
+    "A little quiet time is nice sometimes.",
+    "I'll wait here for you.",
+
+    // Casual chatter
+    "Hmm. What should we do next?",
+    "I was just thinking about snacks.",
+    "Do you ever just sit and forget what you were doing?",
+    "I wonder what's happening outside.",
+    "Well, this is a nice place to sit.",
+    "I have absolutely nothing to report.",
+    "Just me and my thoughts over here.",
+    "Did you know I can sit here all day?",
+    "I'm not bored. I'm just professionally relaxing.",
+    "I had a thought. I forgot it.",
+    "What a perfectly ordinary moment.",
+    "I could get used to this.",
+    "Do you think pets have hobbies?",
+    "My hobby is apparently waiting.",
+    "I wonder if I look busy enough.",
+    "If I stare at the wall long enough, will something happen?",
+    "I should probably do something productive.",
+    "Nah. Maybe later.",
+    "I feel like something is missing. Oh, right. Snacks.",
+    "This silence is kind of nice.",
+    "I wonder what your favorite thing is today.",
+    "Nothing to see here. Just a tiny pet.",
+    "I think I blinked for five minutes.",
+    "Is it weird that I'm enjoying doing nothing?",
+    "I could use a tiny adventure.",
+    "Maybe we should go somewhere. In a little while.",
+    "I'm having a very important rest.",
+    "I have no plans, and I'm sticking to them.",
+    "Do you think clouds ever get tired?",
+    "I wonder if fish get thirsty.",
+    "That was a deep thought. Probably.",
+    "I forgot what I was going to say.",
+    "Anyway, how are you doing?",
+    "I hope your day is going all right.",
+    "You don't have to entertain me, you know.",
+    "I'm pretty good at keeping myself company.",
+    "I think I'll just sit here for a bit longer.",
+    "Something tells me it's snack time somewhere.",
+    "I wonder if I could learn to juggle.",
+    "Imagine if I had tiny little shoes.",
+    "I would probably trip over them.",
+    "Sometimes doing nothing is doing enough.",
+    "I think I deserve a tiny award for sitting.",
+    "If there were a competition for waiting, I'd win.",
+    "I should write a book about doing nothing.",
+    "Chapter one: Sit down.",
+    "Chapter two: Keep sitting.",
+    "A thrilling story, honestly.",
+
+    // Friendly check-ins
+    "Hey, how's your day going?",
+    "Have you had a chance to relax today?",
+    "Don't forget to stretch a little.",
+    "Remember to drink some water, okay?",
+    "I hope things are going well for you.",
+    "You can take your time with everything.",
+    "How are you feeling right now?",
+    "I hope you aren't working too hard.",
+    "It's okay to take a break when you need one.",
+    "Just checking whether you're doing okay.",
+    "I hope something nice happens to you today.",
+    "Have you smiled at least once today?",
+    "If not, there's still time.",
+    "I hope you've eaten something good.",
+    "Don't forget to look after yourself, too.",
+    "You deserve a little downtime.",
+    "No need to rush back. Take your time.",
+    "I hope the rest of your day goes smoothly.",
+    "Whatever you're doing, I hope it works out.",
+    "You seem busy. I'll stay out of the way.",
+    "Just a little reminder to breathe.",
+    "One thing at a time, okay?",
+    "You don't have to figure everything out today.",
+    "I hope you get a peaceful moment soon.",
+    "Even a small win is still a win.",
+    "I wonder what made you smile today.",
+    "Did anything interesting happen recently?",
+    "I hope someone has been kind to you today.",
+    "Be nice to yourself, all right?",
+    "You can always take things one step at a time.",
+    "I hope you're giving yourself enough rest.",
+    "It's fine if today is just an ordinary day.",
+    "You don't have to be productive every second.",
+    "I hope you get to do something you enjoy.",
+    "Hey, don't forget to have a little fun.",
+    "I'm glad you stopped by for a bit.",
+    "No pressure. We can just hang out.",
+    "I hope tomorrow brings something good.",
+    "You're allowed to have slow days, too.",
+    "I hope things feel a little lighter soon.",
+
+    // Playful pet thoughts
+    "Psst. Hey. Nothing. Just wanted to say hi.",
+    "Did you hear that? Probably nothing.",
+    "I think I heard a snack wrapper.",
+    "Was that you? Or am I imagining things?",
+    "I could really go for a tiny hat.",
+    "What color do you think would suit me?",
+    "I bet I'd look good in a little bow tie.",
+    "Imagine me wearing sunglasses.",
+    "I'd look incredibly cool.",
+    "I wonder if I could become famous.",
+    "My talent would be sitting very still.",
+    "Autographs will cost one snack each.",
+    "I have big dreams for a little pet.",
+    "Maybe one day I'll learn a cool trick.",
+    "For now, I can blink. Watch this.",
+    "Did you see that? Incredible, right?",
+    "I think I deserve a standing ovation.",
+    "Please hold your applause.",
+    "I wonder if I could fit in a teacup.",
+    "Probably not. Worth investigating, though.",
+    "What if we gave me a tiny backpack?",
+    "I could carry absolutely nothing in it.",
+    "That sounds like a good plan to me.",
+    "I think I just invented a new game.",
+    "The rules are simple. We make them up as we go.",
+    "I bet you can't guess what I'm thinking.",
+    "It's either food or a nap.",
+    "Okay, you got it right. Again.",
+    "I wonder what my theme song would be.",
+    "Something dramatic, probably.",
+    "Cue the music. I'm about to do absolutely nothing.",
+    "I should probably get a little exercise.",
+    "Maybe I'll wiggle my ears. Does that count?",
+    "I'm saving my energy for important pet business.",
+    "This is what peak performance looks like.",
+    "I think my brain needs a software update.",
+    "Have you tried turning me off and on again?",
+    "Just kidding. Please don't.",
+    "I may be small, but my thoughts are enormous.",
+    "That sounded wise. I'm keeping it.",
+    "I wonder if I could win a staring contest.",
+    "Careful. I'm very good at staring.",
+    "Blink and you lose. Ready?",
+    "I forgot the rules already.",
+    "It's okay. We can invent new ones.",
+    "I think I would make a terrible detective.",
+    "I'd get distracted by snacks halfway through.",
+    "Mystery solved: I was hungry.",
+    "I should put that on my résumé.",
+    "Professional snack enthusiast.",
+    "Experienced nap taker.",
+    "Certified friend-shaped creature.",
+    "That last one sounds pretty official.",
+
+    // Quiet and relaxed moments
+    "It's nice when nothing needs to happen.",
+    "We can enjoy the quiet for a little while.",
+    "No big plans. No rush. Just here.",
+    "Sometimes a little peace is all you need.",
+    "The world can wait for a moment.",
+    "I don't mind the silence.",
+    "It's comfortable just being here.",
+    "You can sit with me if you want.",
+    "We don't always need something to talk about.",
+    "A quiet moment can still be a good moment.",
+    "I hope you get plenty of these little breaks.",
+    "Take your time. Nothing is chasing us.",
+    "I'm happy to keep you company.",
+    "Even doing nothing together counts as hanging out.",
+    "I wonder if time moves slower when we're relaxing.",
+    "Let's pretend we don't have any chores today.",
+    "Just for a minute, at least.",
+    "I could sit here and watch the day go by.",
+    "I hope you can enjoy a moment without worrying.",
+    "You can always come back when you're ready.",
+    "I'll be right here, doing my very important sitting.",
+    "Until something exciting happens, anyway.",
+    "Oh, wait. That was exciting. I moved my paw.",
+    "All right, back to relaxing.",
+    "I think I'll close my eyes for a second.",
+    "Don't worry, I'm still listening.",
+    "This is a pretty good place to be.",
+    "Sometimes ordinary moments turn into good memories.",
+    "Maybe this will be one of them.",
+    "Anyway, I'm glad we got to hang out."
   ]
-
-
 };
 
 
@@ -297,118 +491,40 @@ function setAchievement(id, unlocked) {
 
 const moodDialogue = {
   happy: [
+    "That was nice. I'm in a pretty good mood now.",
     "I'm feeling good. Let's enjoy the moment.",
-    "It's a nice, peaceful moment.",
-    "I'm happy just taking things as they come.",
-    "Let's enjoy a little quiet time together.",
-    "Things feel pretty good right now.",
-    "I don't have much to complain about today.",
-    "It's nice when things are going well.",
-    "I feel like today is going to be a good day.",
-    "I'm comfortable just being here for now.",
-    "This is actually a pretty nice day.",
-    "I wouldn't mind staying like this for a while.",
-    "Everything feels a little easier right now.",
-    "I'm in a pretty good mood today.",
-    "It's nice not having to worry about anything for a bit.",
-    "I think I'll just enjoy myself for now.",
-    "I feel like I have plenty of energy today.",
-    "Nothing special is happening, but that's fine with me.",
-    "It's a good time to take things slow.",
-    "I'm glad we get to spend some time together.",
-    "I could get used to days like this."
+    "That made my day a little better.",
+    "I like when we spend time together."
   ],
-
+  content: [
+    "I'm comfortable just sitting here for a while.",
+    "Everything feels pretty settled right now.",
+    "It's a quiet moment. I don't mind that.",
+    "I'm doing okay. We can take our time."
+  ],
   playful: [
     "I could go for a little game, if you're up for it.",
     "Feel like doing something fun?",
     "I've got some energy to spare. What should we do?",
-    "I wouldn't mind playing for a bit.",
-    "Come on, let's do something.",
-    "I've been sitting around long enough.",
-    "I wonder what we could get up to today.",
-    "I feel like moving around a little.",
-    "Got anything interesting planned?",
-    "We should find something to do.",
-    "I'm in the mood for a little fun.",
-    "I bet I could beat you at something.",
-    "It's too nice a day to do absolutely nothing.",
-    "I could use something to keep me busy.",
-    "Let's see if we can make something interesting happen.",
-    "I'm starting to get restless over here.",
-    "How about we take a break from doing nothing?",
-    "I think I have enough energy for one more game.",
-    "There's got to be something fun we can do.",
-    "I'm ready whenever you are."
+    "I wouldn't mind playing for a bit."
   ],
-
   sleepy: [
     "I'm getting tired. I could use some rest.",
     "My energy's running low. Let's take it easy.",
     "I can barely keep my eyes open right now.",
-    "A little rest sounds pretty good.",
-    "I might need a nap soon.",
-    "Everything feels a little slower right now.",
-    "I don't really feel like doing much.",
-    "Can we take a break for a while?",
-    "I could probably fall asleep right here.",
-    "It's getting harder to stay awake.",
-    "I think I've done enough for today.",
-    "Maybe I'll just sit here and relax.",
-    "I'm starting to feel pretty worn out.",
-    "I wouldn't mind getting comfortable somewhere.",
-    "My bed is sounding really good right now.",
-    "I need a moment to recharge.",
-    "I might close my eyes for just a minute.",
-    "Let's leave the exciting stuff for later.",
-    "I'm trying my best to stay awake here.",
-    "I think a little sleep would fix everything."
+    "A little rest sounds pretty good."
   ],
-
   grumpy: [
     "I'm not feeling my best right now.",
     "Could you help me sort out what I need?",
     "I'm a bit uncomfortable. Something's bothering me.",
-    "I'm having a rough moment. Let's take care of things.",
-    "Something feels off, and I can't quite put my finger on it.",
-    "I'm not really in the mood for much right now.",
-    "Could we deal with the important stuff first?",
-    "I'm getting a little frustrated over here.",
-    "Today hasn't exactly been my favorite.",
-    "I think something needs to change.",
-    "I'm trying not to complain, but it's not easy.",
-    "Could use a little help right about now.",
-    "I'm feeling a bit restless, and not in a good way.",
-    "I don't think ignoring this is going to help.",
-    "Something's bothering me. Can we figure it out?",
-    "I'm having trouble getting comfortable.",
-    "I might be easier to deal with after a little care.",
-    "I'm not trying to be difficult. I just feel off.",
-    "Can we sort this out before doing anything else?",
-    "I'm sure I'll feel better once things are taken care of."
+    "I'm having a rough moment. Let's take care of things."
   ],
-
   lonely: [
     "It's been quiet here. I'm glad you're around.",
     "I was hoping we'd spend a little time together.",
     "It's nice to have some company again.",
-    "I missed having you around.",
-    "Haven't seen much of you lately.",
-    "It's a little boring when there's no one around.",
-    "I was starting to think I'd be here by myself all day.",
-    "It's good to have someone to talk to.",
-    "I don't mind some quiet, but this is a bit much.",
-    "We should spend some time together when you can.",
-    "I was wondering when you'd show up.",
-    "It's nice knowing I'm not here all alone.",
-    "Things are a little better now that you're here.",
-    "I could use some company for a while.",
-    "I haven't had much to do without you around.",
-    "It's been a while since we did something together.",
-    "I don't need anything fancy. Just a little company.",
-    "I was getting used to the silence, but this is better.",
-    "Stick around for a bit if you have time.",
-    "It's nice having you here, even if we're just sitting around."
+    "I missed having you around."
   ]
 };
 
@@ -426,31 +542,30 @@ function getCurrentMood({ action = null, idle = false } = {}) {
     return "lonely";
   }
 
+  const positiveAction = ["feed", "play", "pet", "wash"].includes(action);
+  if (positiveAction || now - (Number(state.lastPositiveInteractionAt) || 0) < 5 * 60 * 1000) {
+    return "happy";
+  }
+
   const lastPlay = Number(state.lastPlayAt) || 0;
-  if (Number(state.energy) >= 50 && lastPlay > 0 && now - lastPlay >= 30 * 60 * 1000) {
+  if (Number(state.energy) >= 50 && (!lastPlay || now - lastPlay >= 30 * 60 * 1000)) {
     return "playful";
   }
-  return "happy";
+  return "content";
 }
 
-function showMoodDialogue({ idle = false } = {}) {
-  const mood = getCurrentMood({ idle });
-  const moodLabel = $("currentMoodLabel");
-  if (moodLabel) {
-    const moodNames = { happy: "Happy", playful: "Playful", sleepy: "Sleepy", grumpy: "Grumpy", lonely: "Lonely" };
-    moodLabel.textContent = `Mood: ${moodNames[mood] || "Happy"}`;
-  }
+function showMoodDialogue({ action = null, fallback = null, idle = false } = {}) {
+  const mood = getCurrentMood({ action, idle });
 
-  // Mood-specific lines are reserved for automatic idle chatter only.
-  // Avoid repeating the exact same idle line twice in a row, even across moods.
-  if (idle) {
-    const lines = moodDialogue[mood];
-    if (Array.isArray(lines) && lines.length) {
-      const alternatives = lines.filter(line => line !== lastIdleDialogueLine);
-      const nextLine = randomItem(alternatives.length ? alternatives : lines);
-      lastIdleDialogueLine = nextLine;
-      showSpeech(nextLine);
-    }
+  // Both idle chatter and action responses use the current mood. During
+  // interactions, choose from that mood's lines too, rather than always
+  // falling back to the generic action dialogue. Keep the fallback as a
+  // safety net if a mood's dialogue list is ever empty.
+  const lines = moodDialogue[mood];
+  if (Array.isArray(lines) && lines.length) {
+    showSpeech(randomItem(lines));
+  } else if (fallback) {
+    showSpeech(fallback);
   }
 }
 
@@ -470,15 +585,16 @@ function scheduleIdleDialogue() {
   clearIdleDialogueTimer();
   if (document.hidden) return;
 
-  // Wait 5–7 seconds after the most recent input, then keep rotating.
-  // Activity events restart this timer, so the elapsed-time check is unnecessary
-  // and can incorrectly suppress a line if browser timer scheduling is delayed.
-  const delay = 5000 + Math.floor(Math.random() * 2001);
+  // Rotate mood-appropriate idle dialogue every 5 seconds.
+  const delay = 5000;
   idleDialogueTimer = window.setTimeout(() => {
     idleDialogueTimer = null;
     if (document.hidden) return;
 
-    showMoodDialogue({ idle: true });
+    // Keep idle chatter from interrupting an action or a recent message.
+    if (Date.now() - lastUserActivityAt >= delay - 250) {
+      showMoodDialogue({ idle: true });
+    }
     scheduleIdleDialogue();
   }, delay);
 }
@@ -622,7 +738,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 2);
       const gain = state.happiness < 15 || state.energy < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showSpeech(randomItem(responses));
+      showMoodDialogue({ action, fallback: randomItem(responses) });
       note.textContent = gain
         ? `You fed ${state.name}. +1 friendship. Needs keep declining as time passes.`
         : `You fed ${state.name}. Cinder needs more rest or comfort before this builds friendship.`;
@@ -640,7 +756,7 @@ function doAction(action) {
       const gain = state.hunger < 15 || state.energy < 15 ? 1 : 2;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       state.lastPlayAt = Date.now();
-      showSpeech(randomItem(responses));
+      showMoodDialogue({ action, fallback: randomItem(responses) });
       note.textContent = `You played with ${state.name}. +${gain} friendship, but it used energy and increased hunger.`;
       pet.classList.add("playing");
     }
@@ -648,7 +764,7 @@ function doAction(action) {
     state.energy = clamp(state.energy + 22);
     state.happiness = clamp(state.happiness - 2);
     state.hunger = clamp(state.hunger - 1);
-    showSpeech(randomItem(responses));
+    showMoodDialogue({ action, fallback: randomItem(responses) });
     note.textContent = `${state.name} rested. Energy recovered, but hunger and happiness still need attention.`;
     pet.classList.add("sleeping");
     $("scene").classList.add("sleeping");
@@ -661,7 +777,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 7);
       const gain = state.energy < 10 || state.hunger < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showSpeech(randomItem(responses));
+      showMoodDialogue({ action, fallback: randomItem(responses) });
       note.textContent = gain
         ? `You spent a quiet moment with ${state.name}. +1 friendship.`
         : `You comforted ${state.name}, but they need food or rest before friendship can grow.`;
@@ -682,13 +798,16 @@ function doAction(action) {
     state.happiness = clamp(state.happiness + 2);
     const gain = state.health < 10 || state.hunger < 10 ? 0 : 1;
     state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-    showSpeech(randomItem(responses));
+    showMoodDialogue({ action, fallback: randomItem(responses) });
     note.textContent = `You cleaned ${state.name}. Cleanliness restored${gain ? " and +1 friendship" : ""}.`;
     pet.classList.add("happy");
   }
 
   if (actionSucceeded) {
     state.lastMeaningfulInteractionAt = Date.now();
+    if (["feed", "play", "pet", "wash"].includes(action)) {
+      state.lastPositiveInteractionAt = Date.now();
+    }
   }
 
   if (state.friendship >= 2000 && !state.celebratedFriend) {
@@ -748,6 +867,76 @@ const RANDOM_EVENTS = [
   { id: "familiar", icon: "☕", title: "A Familiar Little Routine", description: "Cinder settles beside you in a way that feels familiar now. Some things become comforting simply because you keep showing up.", condition: s => s.friendship >= 1000, choices: [
     { label: "Stay together a moment", detail: "A small friendship reward.", effects: { happiness: 3, friendship: 8 }, result: "You sit together for a while. Nothing special happens—and that's rather nice." },
     { label: "Give a gentle pat", detail: "A smaller, calm response.", effects: { happiness: 2, friendship: 4 }, result: "Cinder leans into your hand, then goes back to relaxing." }
+  ]},
+  { id: "rainy-window", icon: "🌧️", title: "Rain at the Window", description: "Rain taps against the window. Cinder watches the drops race down the glass, occasionally glancing back at you.", choices: [
+    { label: "Watch the rain together", detail: "A calm moment and friendship.", effects: { happiness: 3, friendship: 5 }, result: "You watch the rain for a while. Cinder settles comfortably beside you." },
+    { label: "Make a little game of it", detail: "More fun, but uses energy.", effects: { happiness: 5, energy: -2, friendship: 4 }, result: "You pick raindrops to follow. Cinder takes the competition surprisingly seriously." },
+    { label: "Let Cinder enjoy the view", detail: "A small, thoughtful friendship gain.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder some quiet space, staying close by." }
+  ]},
+  { id: "blanket-fort", icon: "🧺", title: "The Blanket Situation", description: "A blanket has slipped onto the floor, and Cinder has decided it is now an important discovery.", choices: [
+    { label: "Make a little blanket nest", detail: "Comfort, with a friendship boost.", effects: { happiness: 4, energy: 2, friendship: 5 }, result: "The blanket nest is a little lopsided, but Cinder approves of it." },
+    { label: "Fold it together", detail: "A small shared task.", effects: { happiness: 2, friendship: 4 }, result: "You fold the blanket together. Cinder mostly supervises, but the company is nice." },
+    { label: "Leave it as Cinder arranged it", detail: "Respect Cinder's creative choices.", effects: { happiness: 1, friendship: 2 }, result: "You decide not to interfere with the arrangement. Cinder seems satisfied." }
+  ]},
+  { id: "birdwatching", icon: "🐦", title: "Visitors Outside", description: "A small bird lands outside. Cinder has gone very still, watching every movement.", choices: [
+    { label: "Watch quietly together", detail: "A peaceful friendship gain.", effects: { happiness: 3, friendship: 5 }, result: "The bird stays for a moment before flying away. Cinder keeps looking at the empty spot." },
+    { label: "Point out where it went", detail: "A little curiosity and friendship.", effects: { happiness: 2, friendship: 3 }, result: "Cinder follows your gesture and seems pleased to have shared the discovery." },
+    { label: "Let Cinder watch alone", detail: "A little independence, with a small bond gain.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder room to concentrate, remaining nearby." }
+  ]},
+  { id: "paper-ball", icon: "🗞️", title: "The Paper Ball", description: "A scrap of paper has rolled into a ball. Cinder nudges it toward you and waits.", condition: s => s.energy >= 15, choices: [
+    { label: "Roll it back and forth", detail: "Fun, friendship, and a little energy cost.", effects: { happiness: 5, energy: -3, hunger: -1, friendship: 6 }, result: "The paper ball travels approximately three feet. It is, somehow, a good game." },
+    { label: "Make a gentle toss", detail: "A short game and a modest bond gain.", effects: { happiness: 3, energy: -2, friendship: 4 }, result: "Cinder trots after it and brings it back with an expectant look." },
+    { label: "Save it for later", detail: "A small friendship gain without tiring out.", effects: { happiness: 1, friendship: 2 }, result: "You put the paper ball somewhere safe for another time." }
+  ]},
+  { id: "plant-check", icon: "🪴", title: "The Plant Needs Attention", description: "The little plant by the window looks dry. Cinder sits nearby while you notice it.", choices: [
+    { label: "Water it together", detail: "A shared task and friendship.", effects: { happiness: 2, friendship: 5 }, result: "You water the plant. Cinder watches the water disappear into the soil." },
+    { label: "Let Cinder inspect it", detail: "Curiosity and a small bond gain.", effects: { happiness: 2, friendship: 3 }, result: "Cinder sniffs the pot carefully, then decides it is probably fine." },
+    { label: "Move it into the light", detail: "A thoughtful choice and a little friendship.", effects: { happiness: 1, friendship: 2 }, result: "You shift the plant toward the light. Cinder follows along to supervise." }
+  ]},
+  { id: "lost-sock", icon: "🧦", title: "A Missing Sock", description: "Cinder has found a sock that you thought was missing. It is being presented to you like a valuable treasure.", choices: [
+    { label: "Thank Cinder for the discovery", detail: "Appreciation builds friendship.", effects: { happiness: 3, friendship: 6 }, result: "You thank Cinder. The sock is returned, and Cinder looks pleased with the work." },
+    { label: "Trade it for a toy", detail: "A little play and friendship.", effects: { happiness: 4, energy: -1, friendship: 4 }, result: "Cinder accepts the trade and immediately investigates the toy." },
+    { label: "Put it away together", detail: "A small shared task.", effects: { happiness: 1, friendship: 3 }, result: "The sock makes it back to its proper place, with Cinder close behind." }
+  ]},
+  { id: "quiet-hum", icon: "🎵", title: "A Quiet Tune", description: "Cinder perks up when you start humming. The room feels a little less quiet.", choices: [
+    { label: "Keep humming", detail: "A relaxed moment and friendship.", effects: { happiness: 4, friendship: 5 }, result: "You hum a little longer. Cinder settles in as if this was the plan all along." },
+    { label: "Make up a silly tune", detail: "More happiness and a bond boost.", effects: { happiness: 5, friendship: 4 }, result: "The tune has no clear melody, but Cinder seems entertained anyway." },
+    { label: "Sit together in silence", detail: "Quiet company still counts.", effects: { happiness: 2, friendship: 3 }, result: "You let the room grow quiet again. Cinder stays close." }
+  ]},
+  { id: "box-discovery", icon: "📦", title: "An Empty Box", description: "An empty box has appeared in the room. Cinder has already decided to investigate it.", choices: [
+    { label: "Turn it into a hideout", detail: "A fun project and friendship.", effects: { happiness: 5, energy: -2, friendship: 6 }, result: "The box becomes a temporary hideout. Cinder seems to think it is excellent architecture." },
+    { label: "Peek inside together", detail: "A little curiosity and friendship.", effects: { happiness: 3, friendship: 4 }, result: "You inspect the very empty box together. Nothing is inside, but the investigation was thorough." },
+    { label: "Keep it for another day", detail: "A small bond gain without much effort.", effects: { happiness: 1, friendship: 2 }, result: "You set the box aside. Cinder appears to approve of keeping options open." }
+  ]},
+  { id: "warm-drink", icon: "☕", title: "A Warm Break", description: "You take a break, and Cinder settles nearby. There is no particular reason to rush back to anything.", choices: [
+    { label: "Take a proper break", detail: "A little happiness and friendship.", effects: { happiness: 3, energy: 2, friendship: 5 }, result: "You take a few quiet minutes. Cinder seems content with the unremarkable afternoon." },
+    { label: "Give Cinder some attention", detail: "A direct friendship reward.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before returning to your day." },
+    { label: "Stay nearby while you rest", detail: "Quiet company and a small bond gain.", effects: { energy: 1, friendship: 3 }, result: "You both take it easy for a while. It is a decent way to spend a few minutes." }
+  ]},
+  { id: "shadow-chase", icon: "🌤️", title: "A Moving Shadow", description: "Sunlight shifts across the floor, and Cinder starts following the changing patch of light.", condition: s => s.energy >= 20, choices: [
+    { label: "Follow the light together", detail: "Playful time and friendship.", effects: { happiness: 4, energy: -3, friendship: 5 }, result: "The light moves away before either of you can catch it. Cinder still seems pleased." },
+    { label: "Point out the next spot", detail: "A little shared fun.", effects: { happiness: 3, friendship: 4 }, result: "Cinder follows your point and discovers another bright patch on the floor." },
+    { label: "Let Cinder keep exploring", detail: "A little independence and friendship.", effects: { happiness: 2, friendship: 2 }, result: "You let Cinder investigate at their own pace, staying close enough to keep them company." }
+  ]},
+  { id: "good-morning", icon: "🌅", title: "A Slow Morning", description: "The room is quiet, and Cinder is just waking up. It seems like a good time not to hurry.", condition: s => s.energy < 85, choices: [
+    { label: "Greet Cinder gently", detail: "A gentle start and friendship.", effects: { happiness: 2, energy: 1, friendship: 4 }, result: "Cinder stretches and looks a little more awake after your greeting." },
+    { label: "Sit nearby until Cinder wakes", detail: "Patience earns a little friendship.", effects: { energy: 2, friendship: 5 }, result: "You wait nearby. Eventually Cinder opens their eyes and comes over." },
+    { label: "Let Cinder wake at their own pace", detail: "Respect their rest and build a little trust.", effects: { energy: 3, friendship: 2 }, result: "You leave Cinder to wake naturally. They seem comfortable knowing you are around." }
+  ]},
+  { id: "tiny-doodle", icon: "✏️", title: "A Tiny Doodle", description: "A pen and a scrap of paper are nearby. Cinder watches as you draw a little shape, then nudges the page.", choices: [
+    { label: "Draw Cinder a portrait", detail: "A thoughtful gesture and friendship.", effects: { happiness: 4, friendship: 7 }, result: "The portrait is not especially realistic, but Cinder has no complaints." },
+    { label: "Let Cinder choose the next shape", detail: "A small creative moment.", effects: { happiness: 3, friendship: 5 }, result: "Cinder's choice is mostly a paw mark. It still counts as collaboration." },
+    { label: "Keep the drawing simple", detail: "A quiet moment and modest friendship.", effects: { happiness: 1, friendship: 3 }, result: "You finish a tiny doodle and leave it somewhere Cinder can see it." }
+  ]},
+  { id: "evening-lights", icon: "🌙", title: "Evening Lights", description: "The room grows dimmer as evening settles in. Cinder looks toward the window, then back at you.", choices: [
+    { label: "Watch the sky change", detail: "A peaceful friendship reward.", effects: { happiness: 3, energy: 1, friendship: 6 }, result: "The sky changes slowly. Cinder stays beside you until the room feels quieter." },
+    { label: "Settle in for the evening", detail: "Comfort and friendship.", effects: { happiness: 2, energy: 2, friendship: 4 }, result: "You make the room comfortable for the evening. Cinder finds a place nearby." },
+    { label: "Give Cinder a gentle pat", detail: "A small moment of connection.", effects: { happiness: 2, friendship: 3 }, result: "Cinder leans into your hand before settling down again." }
+  ]},
+  { id: "curious-corner", icon: "🔍", title: "The Curious Corner", description: "Cinder has discovered a corner that apparently deserves a very thorough inspection.", choices: [
+    { label: "Investigate together", detail: "Curiosity and a friendship boost.", effects: { happiness: 2, energy: -1, friendship: 5 }, result: "The corner contains no surprises, but Cinder seems happy you investigated it together." },
+    { label: "Bring a toy along", detail: "Turn the investigation into play.", effects: { happiness: 4, energy: -2, friendship: 4 }, result: "The toy makes the corner much more interesting, at least by Cinder's standards." },
+    { label: "Keep Cinder company", detail: "A modest reward for being there.", effects: { happiness: 1, friendship: 2 }, result: "You stay nearby while Cinder finishes the inspection." }
   ]}
 ];
 const EVENT_FIRST_MIN = 1 * 60 * 1000;
@@ -796,7 +985,9 @@ function showRandomEvent() {
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'event-choice';
     const title = document.createElement('strong'); title.textContent = choice.label;
-    const detail = document.createElement('small'); detail.textContent = choice.detail;
+    const detail = document.createElement('small');
+    const friendshipReward = typeof choice.effects?.friendship === 'number' ? choice.effects.friendship : 1;
+    detail.textContent = `${choice.detail} · Friendship +${friendshipReward}`;
     button.append(title, detail);
     button.addEventListener('click', () => resolveRandomEvent(index), { once: true });
     choices.appendChild(button);
@@ -813,6 +1004,10 @@ function resolveRandomEvent(index) {
   const choice = event.choices[index];
   if (!choice) { eventChoiceLocked = false; return; }
   const effects = choice.effects || {};
+  // Even a neutral or cautious response can build a little trust; event choices
+  // with explicit friendship values retain their intended, larger rewards.
+  const friendshipBefore = Number(state.friendship) || 0;
+  if (typeof effects.friendship !== 'number') effects.friendship = 1;
   ['hunger', 'happiness', 'energy', 'cleanliness', 'health'].forEach(key => {
     if (typeof effects[key] === 'number') state[key] = clamp(Number(state[key] || 0) + effects[key]);
   });
@@ -829,7 +1024,8 @@ function resolveRandomEvent(index) {
   eventChoiceLocked = false;
   $('eventResultIcon').textContent = event.icon || '☕';
   $('eventResultTitle').textContent = choice.label;
-  $('eventResultMessage').textContent = result;
+  const friendshipGained = Math.max(0, Number(state.friendship) - friendshipBefore);
+  $('eventResultMessage').textContent = `${result}${friendshipGained > 0 ? ` (+${friendshipGained} friendship)` : ''}`;
   $('eventResultBackdrop').hidden = false;
   lastUserActivityAt = Date.now();
   render();

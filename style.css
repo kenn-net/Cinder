@@ -76,7 +76,6 @@ h1 span { color: var(--pink); font-size: 12px; vertical-align: top; margin-left:
 .pet-info { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 19px 6px 17px; }
 .pet-info h3 { margin: 0; font-size: 25px; font-weight: 900; letter-spacing: -.04em; }
 .pet-title { margin: 2px 0 0; color: var(--muted); font-size: 12px; }
-.pet-mood { display: inline-block; margin: 7px 0 0; padding: 4px 9px; border: 1px solid #ead9c6; border-radius: 999px; background: #fff5e7; color: #80634e; font-size: 11px; font-weight: 800; }
 .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; padding: 2px 6px 19px; }
 .stat-heading { display: flex; justify-content: space-between; margin-bottom: 7px; font-size: 12px; font-weight: 800; }
 .stat-heading strong { color: #9c899d; font: 500 11px 'DM Mono', monospace; }
