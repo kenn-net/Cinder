@@ -394,6 +394,18 @@ function render() {
     $(key + "Bar").style.width = state[key] + "%";
   });
   $("petName").textContent = state.name;
+  const mood = getCurrentMood({ idle: true });
+  const moodLabel = $("currentMood");
+  const moodNames = {
+    happy: "😊 Happy",
+    content: "😌 Content",
+    playful: "🎾 Playful",
+    sleepy: "😴 Sleepy",
+    grumpy: "😣 Grumpy",
+    lonely: "🥺 Lonely"
+  };
+  moodLabel.textContent = `Mood: ${moodNames[mood] || mood}`;
+  moodLabel.dataset.mood = mood;
   const friendshipPercent = Math.min(100, (state.friendship / FRIENDSHIP_GOAL) * 100);
   $("friendshipBar").style.width = friendshipPercent + "%";
   $("friendshipBar").setAttribute("aria-label", `${Math.floor(state.friendship)} of ${FRIENDSHIP_GOAL} friendship`);

@@ -250,3 +250,41 @@ footer { text-align: center; padding: 23px 0 0; color: #b09eab; font: 500 9px 'D
 @media (prefers-reduced-motion: reduce) {
   .scene, .scene .sun, .scene .moon, .scene .cloud, .scene .sparkle, .night-stars { transition: none; }
 }
+
+/* Current mood indicator */
+.current-mood {
+  display: inline-block;
+  margin: 8px 0 0;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: #f4edf9;
+  color: #78628d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.current-mood[data-mood="happy"] {
+  background: #fff3d5;
+  color: #98702d;
+}
+
+.current-mood[data-mood="sleepy"] {
+  background: #e9efff;
+  color: #596a9b;
+}
+
+.current-mood[data-mood="grumpy"] {
+  background: #ffebe6;
+  color: #a65c4c;
+}
+
+.current-mood[data-mood="playful"] {
+  background: #e5f7ec;
+  color: #43815d;
+}
+
+.current-mood[data-mood="lonely"] {
+  background: #f9eafa;
+  color: #95639b;
+}
+
