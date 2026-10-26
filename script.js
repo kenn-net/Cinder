@@ -11,6 +11,7 @@ let needsTimer = null;
 let idleDialogueTimer = null;
 let petAnimationTimer = null;
 let lastUserActivityAt = Date.now();
+let lastSpokenDialogue = "";
 
 const defaults = {
   name: "Cinder",
@@ -386,7 +387,15 @@ const dialogue = {
 
 
 function clamp(value) { return Math.max(0, Math.min(100, value)); }
-function randomItem(items) { return items[Math.floor(Math.random() * items.length)]; }
+function randomItem(items) {
+  if (!Array.isArray(items) || items.length === 0) return "";
+  // Avoid choosing the exact same line that was just shown whenever possible.
+  const choices = items.length > 1 && lastSpokenDialogue
+    ? items.filter((item) => item !== lastSpokenDialogue)
+    : items;
+  const pool = choices.length ? choices : items;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 function render() {
   ["hunger", "happiness", "energy", "cleanliness", "health", "friendship"].forEach((key) => {
@@ -582,7 +591,17 @@ function showMoodDialogue({ action = null, fallback = null, idle = false } = {})
 }
 
 function showSpeech(message) {
+  // Some fixed responses (for example, a blocked action) bypass randomItem.
+  // If one would repeat, swap it for a different existing Cinder line.
+  if (message && message === lastSpokenDialogue) {
+    const alternatives = [
+      ...Object.values(dialogue).flat(),
+      ...Object.values(moodDialogue).flat()
+    ].filter((line) => line !== lastSpokenDialogue);
+    if (alternatives.length) message = randomItem(alternatives);
+  }
   bubble.textContent = message;
+  lastSpokenDialogue = message;
   bubble.animate([{ transform: "translateX(-50%) scale(.85)", opacity: .5 }, { transform: "translateX(-50%) scale(1)", opacity: 1 }], { duration: 180, easing: "ease-out" });
 }
 
@@ -597,8 +616,8 @@ function scheduleIdleDialogue() {
   clearIdleDialogueTimer();
   if (document.hidden) return;
 
-  // Rotate mood-appropriate idle dialogue every 5 seconds.
-  const delay = 5000;
+  // Rotate mood-appropriate idle dialogue every 10 seconds.
+  const delay = 10000;
   idleDialogueTimer = window.setTimeout(() => {
     idleDialogueTimer = null;
     if (document.hidden) return;
@@ -921,8 +940,8 @@ const RANDOM_EVENTS = [
     { label: "Keep it for another day", detail: "A small bond gain without much effort.", effects: { happiness: 1, friendship: 2 }, result: "You set the box aside. Cinder appears to approve of keeping options open." }
   ]},
   { id: "warm-drink", icon: "☕", title: "A Warm Break", description: "You take a break, and Cinder settles nearby. There is no particular reason to rush back to anything.", choices: [
-    { label: "Take a proper break", detail: "A little happiness and friendship.", effects: { happiness: 3, energy: 2, friendship: 5 }, result: "You take a few quiet minutes. Cinder seems content with the unremarkable afternoon." },
-    { label: "Give Cinder some attention", detail: "A direct friendship reward.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before returning to your day." },
+    { label: "Take a proper break", detail: "A little happiness and friendship.", effects: { happiness: 3, energy: 2, friendship: 5 }, result: "You take a few quiet minutes. Cinder seems content with the quiet break." },
+    { label: "Give Cinder some attention", detail: "A direct friendship reward.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before getting back to things." },
     { label: "Stay nearby while you rest", detail: "Quiet company and a small bond gain.", effects: { energy: 1, friendship: 3 }, result: "You both take it easy for a while. It is a decent way to spend a few minutes." }
   ]},
   { id: "tiny-doodle", icon: "✏️", title: "A Tiny Doodle", description: "A pen and a scrap of paper are nearby. Cinder watches as you draw a little shape, then nudges the page.", choices: [
@@ -936,10 +955,10 @@ const RANDOM_EVENTS = [
     { label: "Keep Cinder company", detail: "A modest reward for being there.", effects: { happiness: 1, friendship: 2 }, result: "You stay nearby while Cinder finishes the inspection." }
   ]}
 ];
-const EVENT_FIRST_MIN = 1 * 60 * 1000;
-const EVENT_FIRST_MAX = 1 * 60 * 1000;
-const EVENT_NEXT_INTERVAL = 1 * 60 * 1000;
-const EVENT_TIMING_VERSION = 2;
+const EVENT_FIRST_MIN = 2 * 60 * 1000;
+const EVENT_FIRST_MAX = 2 * 60 * 1000;
+const EVENT_NEXT_INTERVAL = 2 * 60 * 1000;
+const EVENT_TIMING_VERSION = 3;
 let eventTimer = null;
 let activeRandomEvent = null;
 let eventChoiceLocked = false;
