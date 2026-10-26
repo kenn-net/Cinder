@@ -187,202 +187,6 @@ const dialogue = {
     "All right, you can stay."
   ],
 
-  idle: [
-    "Just hanging out? That's fine.",
-    "It's pretty quiet right now.",
-    "I'll be here when you need me.",
-    "Taking a little break?",
-    "Nothing much happening, huh?",
-    "We can just sit here for a bit.",
-    "Hey. Just checking in.",
-    "Still there? No rush.",
-    "It's nice to have a quiet moment.",
-    "You can come back whenever you want.",
-    "I wonder what you're up to.",
-    "I'm getting comfortable over here.",
-    "No need to hurry. I'm okay.",
-    "A little quiet time is nice sometimes.",
-    "I'll wait here for you.",
-
-    // Casual chatter
-    "Hmm. What should we do next?",
-    "I was just thinking about snacks.",
-    "Do you ever just sit and forget what you were doing?",
-    "I wonder what's happening outside.",
-    "Well, this is a nice place to sit.",
-    "I have absolutely nothing to report.",
-    "Just me and my thoughts over here.",
-    "Did you know I can sit here all day?",
-    "I'm not bored. I'm just professionally relaxing.",
-    "I had a thought. I forgot it.",
-    "What a perfectly ordinary moment.",
-    "I could get used to this.",
-    "Do you think pets have hobbies?",
-    "My hobby is apparently waiting.",
-    "I wonder if I look busy enough.",
-    "If I stare at the wall long enough, will something happen?",
-    "I should probably do something productive.",
-    "Nah. Maybe later.",
-    "I feel like something is missing. Oh, right. Snacks.",
-    "This silence is kind of nice.",
-    "I wonder what your favorite thing is today.",
-    "Nothing to see here. Just a tiny pet.",
-    "I think I blinked for five minutes.",
-    "Is it weird that I'm enjoying doing nothing?",
-    "I could use a tiny adventure.",
-    "Maybe we should go somewhere. In a little while.",
-    "I'm having a very important rest.",
-    "I have no plans, and I'm sticking to them.",
-    "Do you think clouds ever get tired?",
-    "I wonder if fish get thirsty.",
-    "That was a deep thought. Probably.",
-    "I forgot what I was going to say.",
-    "Anyway, how are you doing?",
-    "I hope your day is going all right.",
-    "You don't have to entertain me, you know.",
-    "I'm pretty good at keeping myself company.",
-    "I think I'll just sit here for a bit longer.",
-    "Something tells me it's snack time somewhere.",
-    "I wonder if I could learn to juggle.",
-    "Imagine if I had tiny little shoes.",
-    "I would probably trip over them.",
-    "Sometimes doing nothing is doing enough.",
-    "I think I deserve a tiny award for sitting.",
-    "If there were a competition for waiting, I'd win.",
-    "I should write a book about doing nothing.",
-    "Chapter one: Sit down.",
-    "Chapter two: Keep sitting.",
-    "A thrilling story, honestly.",
-
-    // Friendly check-ins
-    "Hey, how's your day going?",
-    "Have you had a chance to relax today?",
-    "Don't forget to stretch a little.",
-    "Remember to drink some water, okay?",
-    "I hope things are going well for you.",
-    "You can take your time with everything.",
-    "How are you feeling right now?",
-    "I hope you aren't working too hard.",
-    "It's okay to take a break when you need one.",
-    "Just checking whether you're doing okay.",
-    "I hope something nice happens to you today.",
-    "Have you smiled at least once today?",
-    "If not, there's still time.",
-    "I hope you've eaten something good.",
-    "Don't forget to look after yourself, too.",
-    "You deserve a little downtime.",
-    "No need to rush back. Take your time.",
-    "I hope the rest of your day goes smoothly.",
-    "Whatever you're doing, I hope it works out.",
-    "You seem busy. I'll stay out of the way.",
-    "Just a little reminder to breathe.",
-    "One thing at a time, okay?",
-    "You don't have to figure everything out today.",
-    "I hope you get a peaceful moment soon.",
-    "Even a small win is still a win.",
-    "I wonder what made you smile today.",
-    "Did anything interesting happen recently?",
-    "I hope someone has been kind to you today.",
-    "Be nice to yourself, all right?",
-    "You can always take things one step at a time.",
-    "I hope you're giving yourself enough rest.",
-    "It's fine if today is just an ordinary day.",
-    "You don't have to be productive every second.",
-    "I hope you get to do something you enjoy.",
-    "Hey, don't forget to have a little fun.",
-    "I'm glad you stopped by for a bit.",
-    "No pressure. We can just hang out.",
-    "I hope tomorrow brings something good.",
-    "You're allowed to have slow days, too.",
-    "I hope things feel a little lighter soon.",
-
-    // Playful pet thoughts
-    "Psst. Hey. Nothing. Just wanted to say hi.",
-    "Did you hear that? Probably nothing.",
-    "I think I heard a snack wrapper.",
-    "Was that you? Or am I imagining things?",
-    "I could really go for a tiny hat.",
-    "What color do you think would suit me?",
-    "I bet I'd look good in a little bow tie.",
-    "Imagine me wearing sunglasses.",
-    "I'd look incredibly cool.",
-    "I wonder if I could become famous.",
-    "My talent would be sitting very still.",
-    "Autographs will cost one snack each.",
-    "I have big dreams for a little pet.",
-    "Maybe one day I'll learn a cool trick.",
-    "For now, I can blink. Watch this.",
-    "Did you see that? Incredible, right?",
-    "I think I deserve a standing ovation.",
-    "Please hold your applause.",
-    "I wonder if I could fit in a teacup.",
-    "Probably not. Worth investigating, though.",
-    "What if we gave me a tiny backpack?",
-    "I could carry absolutely nothing in it.",
-    "That sounds like a good plan to me.",
-    "I think I just invented a new game.",
-    "The rules are simple. We make them up as we go.",
-    "I bet you can't guess what I'm thinking.",
-    "It's either food or a nap.",
-    "Okay, you got it right. Again.",
-    "I wonder what my theme song would be.",
-    "Something dramatic, probably.",
-    "Cue the music. I'm about to do absolutely nothing.",
-    "I should probably get a little exercise.",
-    "Maybe I'll wiggle my ears. Does that count?",
-    "I'm saving my energy for important pet business.",
-    "This is what peak performance looks like.",
-    "I think my brain needs a software update.",
-    "Have you tried turning me off and on again?",
-    "Just kidding. Please don't.",
-    "I may be small, but my thoughts are enormous.",
-    "That sounded wise. I'm keeping it.",
-    "I wonder if I could win a staring contest.",
-    "Careful. I'm very good at staring.",
-    "Blink and you lose. Ready?",
-    "I forgot the rules already.",
-    "It's okay. We can invent new ones.",
-    "I think I would make a terrible detective.",
-    "I'd get distracted by snacks halfway through.",
-    "Mystery solved: I was hungry.",
-    "I should put that on my résumé.",
-    "Professional snack enthusiast.",
-    "Experienced nap taker.",
-    "Certified friend-shaped creature.",
-    "That last one sounds pretty official.",
-
-    // Quiet and relaxed moments
-    "It's nice when nothing needs to happen.",
-    "We can enjoy the quiet for a little while.",
-    "No big plans. No rush. Just here.",
-    "Sometimes a little peace is all you need.",
-    "The world can wait for a moment.",
-    "I don't mind the silence.",
-    "It's comfortable just being here.",
-    "You can sit with me if you want.",
-    "We don't always need something to talk about.",
-    "A quiet moment can still be a good moment.",
-    "I hope you get plenty of these little breaks.",
-    "Take your time. Nothing is chasing us.",
-    "I'm happy to keep you company.",
-    "Even doing nothing together counts as hanging out.",
-    "I wonder if time moves slower when we're relaxing.",
-    "Let's pretend we don't have any chores today.",
-    "Just for a minute, at least.",
-    "I could sit here and watch the day go by.",
-    "I hope you can enjoy a moment without worrying.",
-    "You can always come back when you're ready.",
-    "I'll be right here, doing my very important sitting.",
-    "Until something exciting happens, anyway.",
-    "Oh, wait. That was exciting. I moved my paw.",
-    "All right, back to relaxing.",
-    "I think I'll close my eyes for a second.",
-    "Don't worry, I'm still listening.",
-    "This is a pretty good place to be.",
-    "Sometimes ordinary moments turn into good memories.",
-    "Maybe this will be one of them.",
-    "Anyway, I'm glad we got to hang out."
-  ]
 };
 
 
@@ -407,7 +211,6 @@ function render() {
   const moodLabel = $("currentMood");
   const moodNames = {
     happy: "😊 Happy",
-    content: "😌 Content",
     playful: "🎾 Playful",
     sleepy: "😴 Sleepy",
     grumpy: "😣 Grumpy",
@@ -512,40 +315,104 @@ function setAchievement(id, unlocked) {
 
 const moodDialogue = {
   happy: [
-    "That was nice. I'm in a pretty good mood now.",
-    "I'm feeling good. Let's enjoy the moment.",
-    "That made my day a little better.",
-    "I like when we spend time together."
-  ],
-  content: [
-    "I'm comfortable just sitting here for a while.",
-    "Everything feels pretty settled right now.",
-    "It's a quiet moment. I don't mind that.",
-    "I'm doing okay. We can take our time."
+    "I'm feeling good today.",
+    "It's a nice, peaceful moment.",
+    "I'm glad to be here with you.",
+    "Things feel pretty good right now.",
+    "I'm enjoying this quiet moment.",
+    "It's a good day to be Cinder.",
+    "I like how calm everything feels.",
+    "It's nice just being here for a while.",
+    "I think today is going pretty well.",
+    "I feel comfortable and content right now.",
+    "Nothing much to worry about at the moment.",
+    "I'm happy to share this little moment with you.",
+    "The world feels a little brighter today.",
+    "I'm doing alright, and that feels nice.",
+    "Let's enjoy the quiet for a bit.",
+    "It's nice when things feel simple.",
+    "I could get used to a day like this.",
+    "I'm in a pretty good place right now."
   ],
   playful: [
     "I could go for a little game, if you're up for it.",
     "Feel like doing something fun?",
     "I've got some energy to spare. What should we do?",
-    "I wouldn't mind playing for a bit."
+    "I wouldn't mind playing for a bit.",
+    "Bet I can make you laugh. Want to see?",
+    "I wonder what kind of fun we can find today.",
+    "Come on, let's make something interesting happen!",
+    "I've got a little mischief in mind.",
+    "Everything looks like a game when you're in the mood.",
+    "I feel like bouncing around for a while.",
+    "What do you say to a tiny adventure?",
+    "I hope you're ready for some fun.",
+    "I have energy to burn. Got any ideas?",
+    "Let's do something silly!",
+    "I wonder if I can surprise you today.",
+    "A little playtime could make this day even better.",
+    "I'm feeling curious. What should we try?",
+    "Stay close—fun might be just around the corner."
   ],
   sleepy: [
     "I'm getting tired. I could use some rest.",
     "My energy's running low. Let's take it easy.",
     "I can barely keep my eyes open right now.",
-    "A little rest sounds pretty good."
+    "A little rest sounds pretty good.",
+    "Could we have a quiet moment? I'm worn out.",
+    "My paws feel heavy today.",
+    "I might close my eyes for just a minute.",
+    "Everything feels extra cozy when I'm sleepy.",
+    "I need to recharge before doing much else.",
+    "A soft place to rest would be wonderful.",
+    "I'm trying not to yawn, but it's hard.",
+    "Maybe I'll dream about something nice.",
+    "I don't have much energy left to spare.",
+    "Let's slow down for a little while.",
+    "I could really use a peaceful nap.",
+    "My eyelids are getting heavier by the second.",
+    "I think my bed is calling my name.",
+    "Just a little rest, then I'll feel better."
   ],
   grumpy: [
     "I'm not feeling my best right now.",
     "Could you help me sort out what I need?",
     "I'm a bit uncomfortable. Something's bothering me.",
-    "I'm having a rough moment. Let's take care of things."
+    "I'm having a rough moment. Let's take care of things.",
+    "Hmm. Something just doesn't feel right.",
+    "I could use a little help getting comfortable.",
+    "I'm feeling rather cranky at the moment.",
+    "Can we fix what's bothering me?",
+    "I'm not in the mood for much until I feel better.",
+    "Everything seems a little irritating right now.",
+    "I think one of my needs has been neglected.",
+    "Could we take a moment to check on me?",
+    "I'm trying to be patient, but it's a rough day.",
+    "Something's off, and I'd like it sorted out.",
+    "I might be a bit snappy until I feel better.",
+    "Let's figure out what I need before anything else.",
+    "I'm uncomfortable. A little care might help.",
+    "I don't feel like myself just now."
   ],
   lonely: [
     "It's been quiet here. I'm glad you're around.",
     "I was hoping we'd spend a little time together.",
     "It's nice to have some company again.",
-    "I missed having you around."
+    "I missed having you around.",
+    "I was starting to wonder when I'd see you again.",
+    "It's better when there's someone to share the moment with.",
+    "I have a lot of quiet thoughts to tell you about.",
+    "Could you stay with me for a little while?",
+    "I like it when we get to spend time together.",
+    "The place feels less quiet now that you're here.",
+    "I was hoping for a little company today.",
+    "It's good to have you back beside me.",
+    "I saved a little moment just for us.",
+    "I don't need much—just a bit of your time.",
+    "I feel less alone when you're nearby.",
+    "I was wondering what you've been up to.",
+    "Let's keep each other company for a while.",
+    "I'm glad this quiet moment isn't just mine anymore."
   ]
 };
 
@@ -563,20 +430,15 @@ function getCurrentMood({ action = null, idle = false } = {}) {
     return "lonely";
   }
 
-  const positiveAction = ["feed", "play", "pet", "wash"].includes(action);
-  if (positiveAction || now - (Number(state.lastPositiveInteractionAt) || 0) < 5 * 60 * 1000) {
-    return "happy";
-  }
-
   const lastPlay = Number(state.lastPlayAt) || 0;
-  if (Number(state.energy) >= 50 && (!lastPlay || now - lastPlay >= 30 * 60 * 1000)) {
+  if (Number(state.energy) >= 50 && lastPlay && now - lastPlay >= 30 * 60 * 1000) {
     return "playful";
   }
-  return "content";
+  return "happy";
 }
 
-function showMoodDialogue({ action = null, fallback = null, idle = false } = {}) {
-  const mood = getCurrentMood({ action, idle });
+function showMoodDialogue({ fallback = null, idle = false } = {}) {
+  const mood = getCurrentMood({ idle });
 
   // Both idle chatter and action responses use the current mood. During
   // interactions, choose from that mood's lines too, rather than always
@@ -769,7 +631,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 2);
       const gain = state.happiness < 15 || state.energy < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showMoodDialogue({ action, fallback: randomItem(responses) });
+      showMoodDialogue({ fallback: randomItem(responses) });
       note.textContent = gain
         ? `You fed ${state.name}. +1 friendship. Needs keep declining as time passes.`
         : `You fed ${state.name}. Cinder needs more rest or comfort before this builds friendship.`;
@@ -787,7 +649,7 @@ function doAction(action) {
       const gain = state.hunger < 15 || state.energy < 15 ? 1 : 2;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       state.lastPlayAt = Date.now();
-      showMoodDialogue({ action, fallback: randomItem(responses) });
+      showMoodDialogue({ fallback: randomItem(responses) });
       note.textContent = `You played with ${state.name}. +${gain} friendship, but it used energy and increased hunger.`;
       pet.classList.add("playing");
     }
@@ -795,7 +657,7 @@ function doAction(action) {
     state.energy = clamp(state.energy + 22);
     state.happiness = clamp(state.happiness - 2);
     state.hunger = clamp(state.hunger - 1);
-    showMoodDialogue({ action, fallback: randomItem(responses) });
+    showMoodDialogue({ fallback: randomItem(responses) });
     note.textContent = `${state.name} rested. Energy recovered, but hunger and happiness still need attention.`;
     pet.classList.add("sleeping");
     $("scene").classList.add("sleeping");
@@ -808,7 +670,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 7);
       const gain = state.energy < 10 || state.hunger < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showMoodDialogue({ action, fallback: randomItem(responses) });
+      showMoodDialogue({ fallback: randomItem(responses) });
       note.textContent = gain
         ? `You spent a quiet moment with ${state.name}. +1 friendship.`
         : `You comforted ${state.name}, but they need food or rest before friendship can grow.`;
@@ -829,7 +691,7 @@ function doAction(action) {
     state.happiness = clamp(state.happiness + 2);
     const gain = state.health < 10 || state.hunger < 10 ? 0 : 1;
     state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-    showMoodDialogue({ action, fallback: randomItem(responses) });
+    showMoodDialogue({ fallback: randomItem(responses) });
     note.textContent = `You cleaned ${state.name}. Cleanliness restored${gain ? " and +1 friendship" : ""}.`;
     pet.classList.add("happy");
   }
