@@ -734,87 +734,87 @@ function save() {
 
 const RANDOM_EVENTS = [
   { id: "under-furniture", icon: "🔎", title: "Something Under the Furniture", description: "Cinder keeps nosing at the corner of the room. Something small is tucked under the furniture.", choices: [
-    { label: "Look together", detail: "Spend a little energy; gain a bit of friendship.", effects: { energy: -2, happiness: 2, friendship: 4 }, result: "You investigate together. Cinder seems pleased you took the time." },
-    { label: "Let Cinder investigate", detail: "A small energy cost and a little happiness.", effects: { energy: -1, happiness: 2 }, result: "Cinder investigates carefully and comes back looking rather proud." },
-    { label: "Leave it for now", detail: "No cost and no reward.", effects: {}, result: "You leave it where it is. Cinder soon finds something else to do." }
+    { label: "Look together", detail: "See what Cinder has found beneath the furniture.", effects: { energy: -2, happiness: 2, friendship: 4 }, result: "You investigate together. Cinder seems pleased you took the time." },
+    { label: "Let Cinder investigate", detail: "Let Cinder take a closer look on their own.", effects: { energy: -1, happiness: 2 }, result: "Cinder investigates carefully and comes back looking rather proud." },
+    { label: "Leave it for now", detail: "Leave the mystery for another time.", effects: {}, result: "You leave it where it is. Cinder soon finds something else to do." }
   ]},
   { id: "snack-request", icon: "🍎", title: "A Very Hopeful Look", description: "Cinder sits near the food bowl and looks up at you. It might be snack time—or Cinder might just be optimistic.", condition: s => s.hunger < 75, choices: [
-    { label: "Offer a small snack", detail: "Restore a little hunger and happiness.", effects: { hunger: 8, happiness: 2, friendship: 2 }, result: "Cinder accepts the snack and settles down happily." },
-    { label: "Check the bowl first", detail: "A sensible choice; no extra reward.", effects: { happiness: 1 }, result: "The bowl can wait until the next proper feeding. Cinder stays nearby." },
-    { label: "Not right now", detail: "No penalty; Cinder can wait.", effects: {}, result: "Cinder gives you one last hopeful look, then wanders off." }
+    { label: "Offer a small snack", detail: "Offer Cinder a little birthday-style treat.", effects: { hunger: 8, happiness: 2, friendship: 2 }, result: "Cinder accepts the snack and settles down happily." },
+    { label: "Check the bowl first", detail: "Check the bowl before deciding what to do.", effects: { happiness: 1 }, result: "The bowl can wait until the next proper feeding. Cinder stays nearby." },
+    { label: "Not right now", detail: "Let Cinder know snack time can wait.", effects: {}, result: "Cinder gives you one last hopeful look, then wanders off." }
   ]},
   { id: "new-toy", icon: "🧶", title: "A Forgotten Toy", description: "Cinder has dragged an old toy into the middle of the room and is waiting to see what you do.", condition: s => s.energy >= 20, choices: [
-    { label: "Play for a moment", detail: "A little fun, at the cost of some energy.", effects: { happiness: 5, energy: -4, hunger: -2, friendship: 4 }, result: "You play for a little while. Cinder seems glad you joined in." },
-    { label: "Put it somewhere safe", detail: "A quiet, no-cost option.", effects: { happiness: 1 }, result: "You put the toy somewhere Cinder can find it again." },
-    { label: "Let Cinder play alone", detail: "A small happiness boost.", effects: { happiness: 2, energy: -1 }, result: "Cinder entertains themself for a while. It seems to help." }
+    { label: "Play for a moment", detail: "Take a moment to play with the forgotten toy.", effects: { happiness: 5, energy: -4, hunger: -2, friendship: 4 }, result: "You play for a little while. Cinder seems glad you joined in." },
+    { label: "Put it somewhere safe", detail: "Put the toy somewhere safe for later.", effects: { happiness: 1 }, result: "You put the toy somewhere Cinder can find it again." },
+    { label: "Let Cinder play alone", detail: "Let Cinder entertain themself for a while.", effects: { happiness: 2, energy: -1 }, result: "Cinder entertains themself for a while. It seems to help." }
   ]},
   { id: "flower", icon: "🌼", title: "A Little Flower", description: "Cinder has found a tiny flower and brought it over to you. It's slightly bent, but Cinder seems pleased.", choices: [
-    { label: "Spend a moment together", detail: "Gain a little happiness and friendship.", effects: { happiness: 3, friendship: 3 }, result: "You spend a quiet moment together. Cinder seems content." },
-    { label: "Give Cinder some attention", detail: "A little more friendship.", effects: { friendship: 5, happiness: 2 }, result: "You give Cinder some attention, and Cinder looks pleased." }
+    { label: "Spend a moment together", detail: "Share a pleasant moment with Cinder.", effects: { happiness: 3, friendship: 3 }, result: "You spend a quiet moment together. Cinder seems content." },
+    { label: "Give Cinder some attention", detail: "Give Cinder a little extra attention.", effects: { friendship: 5, happiness: 2 }, result: "You give Cinder some attention, and Cinder looks pleased." }
   ]},
   { id: "restless", icon: "🐾", title: "Cinder Is Restless", description: "Cinder is pacing around the room, full of energy and looking for something to do.", condition: s => s.energy >= 35, choices: [
-    { label: "Play a quick game", detail: "Fun and friendship, but uses energy.", effects: { happiness: 4, energy: -5, hunger: -2, friendship: 4 }, result: "The game doesn't last long, but it seems to be exactly what Cinder wanted." },
-    { label: "Explore the room", detail: "Uses a little energy and improves happiness.", effects: { energy: -2, happiness: 2 }, result: "You explore the room together. Cinder seems to enjoy the change of pace." },
-    { label: "Encourage a quiet break", detail: "Trade excitement for a little calm.", effects: { happiness: 1, energy: 2 }, result: "Cinder settles down beside you for a quiet moment." }
+    { label: "Play a quick game", detail: "Start a quick game with Cinder.", effects: { happiness: 4, energy: -5, hunger: -2, friendship: 4 }, result: "The game doesn't last long, but it seems to be exactly what Cinder wanted." },
+    { label: "Explore the room", detail: "Explore the room and see what catches Cinder's eye.", effects: { energy: -2, happiness: 2 }, result: "You explore the room together. Cinder seems to enjoy the change of pace." },
+    { label: "Encourage a quiet break", detail: "Settle down together for a quiet break.", effects: { happiness: 1, energy: 2 }, result: "Cinder settles down beside you for a quiet moment." }
   ]},
   { id: "familiar", icon: "☕", title: "A Familiar Little Routine", description: "Cinder settles beside you in a way that feels familiar now. Some things become comforting simply because you keep showing up.", condition: s => s.friendship >= 1000, choices: [
-    { label: "Stay together a moment", detail: "A small friendship reward.", effects: { happiness: 3, friendship: 8 }, result: "You sit together for a while. Nothing special happens—and that's rather nice." },
-    { label: "Give a gentle pat", detail: "A smaller, calm response.", effects: { happiness: 2, friendship: 4 }, result: "Cinder leans into your hand, then goes back to relaxing." }
+    { label: "Stay together a moment", detail: "Enjoy a familiar moment together.", effects: { happiness: 3, friendship: 8 }, result: "You sit together for a while. Nothing special happens—and that's rather nice." },
+    { label: "Give a gentle pat", detail: "Give Cinder a gentle pat and let them relax.", effects: { happiness: 2, friendship: 4 }, result: "Cinder leans into your hand, then goes back to relaxing." }
   ]},
   { id: "rainy-window", icon: "🌧️", title: "Rain at the Window", description: "Rain taps against the window. Cinder watches the drops race down the glass, occasionally glancing back at you.", choices: [
-    { label: "Watch the rain together", detail: "A calm moment and friendship.", effects: { happiness: 3, friendship: 5 }, result: "You watch the rain for a while. Cinder settles comfortably beside you." },
-    { label: "Make a little game of it", detail: "More fun, but uses energy.", effects: { happiness: 5, energy: -2, friendship: 4 }, result: "You pick raindrops to follow. Cinder takes the competition surprisingly seriously." },
-    { label: "Let Cinder enjoy the view", detail: "A small, thoughtful friendship gain.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder some quiet space, staying close by." }
+    { label: "Watch the rain together", detail: "Watch the rain together by the window.", effects: { happiness: 3, friendship: 5 }, result: "You watch the rain for a while. Cinder settles comfortably beside you." },
+    { label: "Make a little game of it", detail: "Turn the raindrops into a little game.", effects: { happiness: 5, energy: -2, friendship: 4 }, result: "You pick raindrops to follow. Cinder takes the competition surprisingly seriously." },
+    { label: "Let Cinder enjoy the view", detail: "Let Cinder enjoy the view at their own pace.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder some quiet space, staying close by." }
   ]},
   { id: "blanket-fort", icon: "🧺", title: "The Blanket Situation", description: "A blanket has slipped onto the floor, and Cinder has decided it is now an important discovery.", choices: [
-    { label: "Make a little blanket nest", detail: "Comfort, with a friendship boost.", effects: { happiness: 4, energy: 2, friendship: 5 }, result: "The blanket nest is a little lopsided, but Cinder approves of it." },
-    { label: "Fold it together", detail: "A small shared task.", effects: { happiness: 2, friendship: 4 }, result: "You fold the blanket together. Cinder mostly supervises, but the company is nice." },
-    { label: "Leave it as Cinder arranged it", detail: "Respect Cinder's creative choices.", effects: { happiness: 1, friendship: 2 }, result: "You decide not to interfere with the arrangement. Cinder seems satisfied." }
+    { label: "Make a little blanket nest", detail: "Make a cozy little nest out of the blanket.", effects: { happiness: 4, energy: 2, friendship: 5 }, result: "The blanket nest is a little lopsided, but Cinder approves of it." },
+    { label: "Fold it together", detail: "Fold the blanket together.", effects: { happiness: 2, friendship: 4 }, result: "You fold the blanket together. Cinder mostly supervises, but the company is nice." },
+    { label: "Leave it as Cinder arranged it", detail: "Leave the blanket just the way Cinder arranged it.", effects: { happiness: 1, friendship: 2 }, result: "You decide not to interfere with the arrangement. Cinder seems satisfied." }
   ]},
   { id: "birdwatching", icon: "🐦", title: "Visitors Outside", description: "A small bird lands outside. Cinder has gone very still, watching every movement.", choices: [
-    { label: "Watch quietly together", detail: "A peaceful friendship gain.", effects: { happiness: 3, friendship: 5 }, result: "The bird stays for a moment before flying away. Cinder keeps looking at the empty spot." },
-    { label: "Point out where it went", detail: "A little curiosity and friendship.", effects: { happiness: 2, friendship: 3 }, result: "Cinder follows your gesture and seems pleased to have shared the discovery." },
-    { label: "Let Cinder watch alone", detail: "A little independence, with a small bond gain.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder room to concentrate, remaining nearby." }
+    { label: "Watch quietly together", detail: "Watch the bird quietly together.", effects: { happiness: 3, friendship: 5 }, result: "The bird stays for a moment before flying away. Cinder keeps looking at the empty spot." },
+    { label: "Point out where it went", detail: "Show Cinder where the bird went.", effects: { happiness: 2, friendship: 3 }, result: "Cinder follows your gesture and seems pleased to have shared the discovery." },
+    { label: "Let Cinder watch alone", detail: "Give Cinder some space to watch the bird.", effects: { happiness: 1, friendship: 2 }, result: "You give Cinder room to concentrate, remaining nearby." }
   ]},
   { id: "paper-ball", icon: "🗞️", title: "The Paper Ball", description: "A scrap of paper has rolled into a ball. Cinder nudges it toward you and waits.", condition: s => s.energy >= 15, choices: [
-    { label: "Roll it back and forth", detail: "Fun, friendship, and a little energy cost.", effects: { happiness: 5, energy: -3, hunger: -1, friendship: 6 }, result: "The paper ball travels approximately three feet. It is, somehow, a good game." },
-    { label: "Make a gentle toss", detail: "A short game and a modest bond gain.", effects: { happiness: 3, energy: -2, friendship: 4 }, result: "Cinder trots after it and brings it back with an expectant look." },
-    { label: "Save it for later", detail: "A small friendship gain without tiring out.", effects: { happiness: 1, friendship: 2 }, result: "You put the paper ball somewhere safe for another time." }
+    { label: "Roll it back and forth", detail: "Roll the paper ball back and forth.", effects: { happiness: 5, energy: -3, hunger: -1, friendship: 6 }, result: "The paper ball travels approximately three feet. It is, somehow, a good game." },
+    { label: "Make a gentle toss", detail: "Gently toss the paper ball for Cinder to chase.", effects: { happiness: 3, energy: -2, friendship: 4 }, result: "Cinder trots after it and brings it back with an expectant look." },
+    { label: "Save it for later", detail: "Save the paper ball for another time.", effects: { happiness: 1, friendship: 2 }, result: "You put the paper ball somewhere safe for another time." }
   ]},
   { id: "plant-check", icon: "🪴", title: "The Plant Needs Attention", description: "The little plant by the window looks dry. Cinder sits nearby while you notice it.", choices: [
-    { label: "Water it together", detail: "A shared task and friendship.", effects: { happiness: 2, friendship: 5 }, result: "You water the plant. Cinder watches the water disappear into the soil." },
-    { label: "Let Cinder inspect it", detail: "Curiosity and a small bond gain.", effects: { happiness: 2, friendship: 3 }, result: "Cinder sniffs the pot carefully, then decides it is probably fine." },
-    { label: "Move it into the light", detail: "A thoughtful choice and a little friendship.", effects: { happiness: 1, friendship: 2 }, result: "You shift the plant toward the light. Cinder follows along to supervise." }
+    { label: "Water it together", detail: "Water the plant together.", effects: { happiness: 2, friendship: 5 }, result: "You water the plant. Cinder watches the water disappear into the soil." },
+    { label: "Let Cinder inspect it", detail: "Let Cinder inspect the plant.", effects: { happiness: 2, friendship: 3 }, result: "Cinder sniffs the pot carefully, then decides it is probably fine." },
+    { label: "Move it into the light", detail: "Move the plant somewhere with better light.", effects: { happiness: 1, friendship: 2 }, result: "You shift the plant toward the light. Cinder follows along to supervise." }
   ]},
   { id: "lost-sock", icon: "🧦", title: "A Missing Sock", description: "Cinder has found a sock that you thought was missing. It is being presented to you like a valuable treasure.", choices: [
-    { label: "Thank Cinder for the discovery", detail: "Appreciation builds friendship.", effects: { happiness: 3, friendship: 6 }, result: "You thank Cinder. The sock is returned, and Cinder looks pleased with the work." },
-    { label: "Trade it for a toy", detail: "A little play and friendship.", effects: { happiness: 4, energy: -1, friendship: 4 }, result: "Cinder accepts the trade and immediately investigates the toy." },
-    { label: "Put it away together", detail: "A small shared task.", effects: { happiness: 1, friendship: 3 }, result: "The sock makes it back to its proper place, with Cinder close behind." }
+    { label: "Thank Cinder for the discovery", detail: "Thank Cinder for finding the missing sock.", effects: { happiness: 3, friendship: 6 }, result: "You thank Cinder. The sock is returned, and Cinder looks pleased with the work." },
+    { label: "Trade it for a toy", detail: "Trade the sock for a toy.", effects: { happiness: 4, energy: -1, friendship: 4 }, result: "Cinder accepts the trade and immediately investigates the toy." },
+    { label: "Put it away together", detail: "Put the sock away together.", effects: { happiness: 1, friendship: 3 }, result: "The sock makes it back to its proper place, with Cinder close behind." }
   ]},
   { id: "quiet-hum", icon: "🎵", title: "A Quiet Tune", description: "Cinder perks up when you start humming. The room feels a little less quiet.", choices: [
-    { label: "Keep humming", detail: "A relaxed moment and friendship.", effects: { happiness: 4, friendship: 5 }, result: "You hum a little longer. Cinder settles in as if this was the plan all along." },
-    { label: "Make up a silly tune", detail: "More happiness and a bond boost.", effects: { happiness: 5, friendship: 4 }, result: "The tune has no clear melody, but Cinder seems entertained anyway." },
-    { label: "Sit together in silence", detail: "Quiet company still counts.", effects: { happiness: 2, friendship: 3 }, result: "You let the room grow quiet again. Cinder stays close." }
+    { label: "Keep humming", detail: "Keep humming while Cinder listens.", effects: { happiness: 4, friendship: 5 }, result: "You hum a little longer. Cinder settles in as if this was the plan all along." },
+    { label: "Make up a silly tune", detail: "Make up a silly tune together.", effects: { happiness: 5, friendship: 4 }, result: "The tune has no clear melody, but Cinder seems entertained anyway." },
+    { label: "Sit together in silence", detail: "Sit together and enjoy the silence.", effects: { happiness: 2, friendship: 3 }, result: "You let the room grow quiet again. Cinder stays close." }
   ]},
   { id: "box-discovery", icon: "📦", title: "An Empty Box", description: "An empty box has appeared in the room. Cinder has already decided to investigate it.", choices: [
-    { label: "Turn it into a hideout", detail: "A fun project and friendship.", effects: { happiness: 5, energy: -2, friendship: 6 }, result: "The box becomes a temporary hideout. Cinder seems to think it is excellent architecture." },
-    { label: "Peek inside together", detail: "A little curiosity and friendship.", effects: { happiness: 3, friendship: 4 }, result: "You inspect the very empty box together. Nothing is inside, but the investigation was thorough." },
-    { label: "Keep it for another day", detail: "A small bond gain without much effort.", effects: { happiness: 1, friendship: 2 }, result: "You set the box aside. Cinder appears to approve of keeping options open." }
+    { label: "Turn it into a hideout", detail: "Turn the box into a little hideout.", effects: { happiness: 5, energy: -2, friendship: 6 }, result: "The box becomes a temporary hideout. Cinder seems to think it is excellent architecture." },
+    { label: "Peek inside together", detail: "Peek inside the box together.", effects: { happiness: 3, friendship: 4 }, result: "You inspect the very empty box together. Nothing is inside, but the investigation was thorough." },
+    { label: "Keep it for another day", detail: "Set the box aside for another day.", effects: { happiness: 1, friendship: 2 }, result: "You set the box aside. Cinder appears to approve of keeping options open." }
   ]},
   { id: "warm-drink", icon: "☕", title: "A Warm Break", description: "You take a break, and Cinder settles nearby. There is no particular reason to rush back to anything.", choices: [
-    { label: "Take a proper break", detail: "A little happiness and friendship.", effects: { happiness: 3, energy: 2, friendship: 5 }, result: "You take a few quiet minutes. Cinder seems content with the quiet break." },
-    { label: "Give Cinder some attention", detail: "A direct friendship reward.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before getting back to things." },
-    { label: "Stay nearby while you rest", detail: "Quiet company and a small bond gain.", effects: { energy: 1, friendship: 3 }, result: "You both take it easy for a while. It is a decent way to spend a few minutes." }
+    { label: "Take a proper break", detail: "Take a proper break together.", effects: { happiness: 3, energy: 2, friendship: 5 }, result: "You take a few quiet minutes. Cinder seems content with the quiet break." },
+    { label: "Give Cinder some attention", detail: "Give Cinder some attention before returning to your tasks.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before getting back to things." },
+    { label: "Stay nearby while you rest", detail: "Rest nearby and enjoy a quiet moment.", effects: { energy: 1, friendship: 3 }, result: "You both take it easy for a while. It is a decent way to spend a few minutes." }
   ]},
   { id: "tiny-doodle", icon: "✏️", title: "A Tiny Doodle", description: "A pen and a scrap of paper are nearby. Cinder watches as you draw a little shape, then nudges the page.", choices: [
-    { label: "Draw Cinder a portrait", detail: "A thoughtful gesture and friendship.", effects: { happiness: 4, friendship: 7 }, result: "The portrait is not especially realistic, but Cinder has no complaints." },
-    { label: "Let Cinder choose the next shape", detail: "A small creative moment.", effects: { happiness: 3, friendship: 5 }, result: "Cinder's choice is mostly a paw mark. It still counts as collaboration." },
-    { label: "Keep the drawing simple", detail: "A quiet moment and modest friendship.", effects: { happiness: 1, friendship: 3 }, result: "You finish a tiny doodle and leave it somewhere Cinder can see it." }
+    { label: "Draw Cinder a portrait", detail: "Draw a little portrait of Cinder.", effects: { happiness: 4, friendship: 7 }, result: "The portrait is not especially realistic, but Cinder has no complaints." },
+    { label: "Let Cinder choose the next shape", detail: "Let Cinder decide what shape to draw next.", effects: { happiness: 3, friendship: 5 }, result: "Cinder's choice is mostly a paw mark. It still counts as collaboration." },
+    { label: "Keep the drawing simple", detail: "Finish a simple doodle for Cinder.", effects: { happiness: 1, friendship: 3 }, result: "You finish a tiny doodle and leave it somewhere Cinder can see it." }
   ]},
   { id: "curious-corner", icon: "🔍", title: "The Curious Corner", description: "Cinder has discovered a corner that apparently deserves a very thorough inspection.", choices: [
-    { label: "Investigate together", detail: "Curiosity and a friendship boost.", effects: { happiness: 2, energy: -1, friendship: 5 }, result: "The corner contains no surprises, but Cinder seems happy you investigated it together." },
-    { label: "Bring a toy along", detail: "Turn the investigation into play.", effects: { happiness: 4, energy: -2, friendship: 4 }, result: "The toy makes the corner much more interesting, at least by Cinder's standards." },
-    { label: "Keep Cinder company", detail: "A modest reward for being there.", effects: { happiness: 1, friendship: 2 }, result: "You stay nearby while Cinder finishes the inspection." }
+    { label: "Investigate together", detail: "Investigate the curious corner together.", effects: { happiness: 2, energy: -1, friendship: 5 }, result: "The corner contains no surprises, but Cinder seems happy you investigated it together." },
+    { label: "Bring a toy along", detail: "Bring a toy along to make exploring more interesting.", effects: { happiness: 4, energy: -2, friendship: 4 }, result: "The toy makes the corner much more interesting, at least by Cinder's standards." },
+    { label: "Keep Cinder company", detail: "Stay nearby while Cinder finishes investigating.", effects: { happiness: 1, friendship: 2 }, result: "You stay nearby while Cinder finishes the inspection." }
   ]}
 ];
 const EVENT_FIRST_MIN = 2 * 60 * 1000;
