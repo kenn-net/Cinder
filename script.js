@@ -925,25 +925,10 @@ const RANDOM_EVENTS = [
     { label: "Give Cinder some attention", detail: "A direct friendship reward.", effects: { happiness: 2, friendship: 6 }, result: "You give Cinder some attention before returning to your day." },
     { label: "Stay nearby while you rest", detail: "Quiet company and a small bond gain.", effects: { energy: 1, friendship: 3 }, result: "You both take it easy for a while. It is a decent way to spend a few minutes." }
   ]},
-  { id: "shadow-chase", icon: "🌤️", title: "A Moving Shadow", description: "Sunlight shifts across the floor, and Cinder starts following the changing patch of light.", condition: s => s.energy >= 20, choices: [
-    { label: "Follow the light together", detail: "Playful time and friendship.", effects: { happiness: 4, energy: -3, friendship: 5 }, result: "The light moves away before either of you can catch it. Cinder still seems pleased." },
-    { label: "Point out the next spot", detail: "A little shared fun.", effects: { happiness: 3, friendship: 4 }, result: "Cinder follows your point and discovers another bright patch on the floor." },
-    { label: "Let Cinder keep exploring", detail: "A little independence and friendship.", effects: { happiness: 2, friendship: 2 }, result: "You let Cinder investigate at their own pace, staying close enough to keep them company." }
-  ]},
-  { id: "good-morning", icon: "🌅", title: "A Slow Morning", description: "The room is quiet, and Cinder is just waking up. It seems like a good time not to hurry.", condition: s => s.energy < 85, choices: [
-    { label: "Greet Cinder gently", detail: "A gentle start and friendship.", effects: { happiness: 2, energy: 1, friendship: 4 }, result: "Cinder stretches and looks a little more awake after your greeting." },
-    { label: "Sit nearby until Cinder wakes", detail: "Patience earns a little friendship.", effects: { energy: 2, friendship: 5 }, result: "You wait nearby. Eventually Cinder opens their eyes and comes over." },
-    { label: "Let Cinder wake at their own pace", detail: "Respect their rest and build a little trust.", effects: { energy: 3, friendship: 2 }, result: "You leave Cinder to wake naturally. They seem comfortable knowing you are around." }
-  ]},
   { id: "tiny-doodle", icon: "✏️", title: "A Tiny Doodle", description: "A pen and a scrap of paper are nearby. Cinder watches as you draw a little shape, then nudges the page.", choices: [
     { label: "Draw Cinder a portrait", detail: "A thoughtful gesture and friendship.", effects: { happiness: 4, friendship: 7 }, result: "The portrait is not especially realistic, but Cinder has no complaints." },
     { label: "Let Cinder choose the next shape", detail: "A small creative moment.", effects: { happiness: 3, friendship: 5 }, result: "Cinder's choice is mostly a paw mark. It still counts as collaboration." },
     { label: "Keep the drawing simple", detail: "A quiet moment and modest friendship.", effects: { happiness: 1, friendship: 3 }, result: "You finish a tiny doodle and leave it somewhere Cinder can see it." }
-  ]},
-  { id: "evening-lights", icon: "🌙", title: "Evening Lights", description: "The room grows dimmer as evening settles in. Cinder looks toward the window, then back at you.", choices: [
-    { label: "Watch the sky change", detail: "A peaceful friendship reward.", effects: { happiness: 3, energy: 1, friendship: 6 }, result: "The sky changes slowly. Cinder stays beside you until the room feels quieter." },
-    { label: "Settle in for the evening", detail: "Comfort and friendship.", effects: { happiness: 2, energy: 2, friendship: 4 }, result: "You make the room comfortable for the evening. Cinder finds a place nearby." },
-    { label: "Give Cinder a gentle pat", detail: "A small moment of connection.", effects: { happiness: 2, friendship: 3 }, result: "Cinder leans into your hand before settling down again." }
   ]},
   { id: "curious-corner", icon: "🔍", title: "The Curious Corner", description: "Cinder has discovered a corner that apparently deserves a very thorough inspection.", choices: [
     { label: "Investigate together", detail: "Curiosity and a friendship boost.", effects: { happiness: 2, energy: -1, friendship: 5 }, result: "The corner contains no surprises, but Cinder seems happy you investigated it together." },
