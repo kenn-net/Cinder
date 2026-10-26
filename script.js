@@ -437,31 +437,26 @@ function getCurrentMood({ action = null, idle = false } = {}) {
   return "happy";
 }
 
-function showMoodDialogue({ fallback = null, idle = false } = {}) {
-  const mood = getCurrentMood({ idle });
+function showActionDialogue(action) {
+  // Action dialogue is selected only from the dialogue for that action.
+  const lines = dialogue[action];
+  if (Array.isArray(lines) && lines.length) {
+    showSpeech(randomItem(lines));
+  }
+}
 
-  // Both idle chatter and action responses use the current mood. During
-  // interactions, choose from that mood's lines too, rather than always
-  // falling back to the generic action dialogue. Keep the fallback as a
-  // safety net if a mood's dialogue list is ever empty.
+function showMoodDialogue() {
+  // Mood determines idle chatter only; action responses never use mood lines.
+  const mood = getCurrentMood({ idle: true });
   const lines = moodDialogue[mood];
   if (Array.isArray(lines) && lines.length) {
     showSpeech(randomItem(lines));
-  } else if (fallback) {
-    showSpeech(fallback);
   }
 }
 
 function showSpeech(message) {
-  // Some fixed responses (for example, a blocked action) bypass randomItem.
-  // If one would repeat, swap it for a different existing Cinder line.
-  if (message && message === lastSpokenDialogue) {
-    const alternatives = [
-      ...Object.values(dialogue).flat(),
-      ...Object.values(moodDialogue).flat()
-    ].filter((line) => line !== lastSpokenDialogue);
-    if (alternatives.length) message = randomItem(alternatives);
-  }
+  // Keep fixed responses in their intended category rather than substituting
+  // an unrelated line when the same message is shown twice in a row.
   bubble.textContent = message;
   lastSpokenDialogue = message;
   bubble.animate([{ transform: "translateX(-50%) scale(.85)", opacity: .5 }, { transform: "translateX(-50%) scale(1)", opacity: 1 }], { duration: 180, easing: "ease-out" });
@@ -486,7 +481,7 @@ function scheduleIdleDialogue() {
 
     // Keep idle chatter from interrupting an action or a recent message.
     if (Date.now() - lastUserActivityAt >= delay - 250) {
-      showMoodDialogue({ idle: true });
+      showMoodDialogue();
     }
     scheduleIdleDialogue();
   }, delay);
@@ -533,32 +528,45 @@ function applyNeedsDecay(now = Date.now()) {
     { key: "energy", decayMs: ENERGY_DECAY_MS },
     { key: "cleanliness", decayMs: CLEANLINESS_DECAY_MS }
   ];
-  let totalCriticalNeedMs = 0;
-  let allStartedHealthy = true;
-  let healthyRecoveryMs = elapsed;
+  const needsAtStart = needRules.map(({ key, decayMs }) => ({
+    key,
+    decayMs,
+    value: clamp(Number(state[key]) || 0)
+  }));
 
-  needRules.forEach(({ key, decayMs }) => {
-    const before = clamp(Number(state[key]) || 0);
-    // A need contributes to health loss only for the part of the interval
-    // during which it was actually at or below the critical threshold.
-    const timeToCritical = before <= 10 ? 0 : (before - 10) * decayMs;
-    totalCriticalNeedMs += Math.max(0, elapsed - timeToCritical);
-    if (before < 60) {
-      allStartedHealthy = false;
-    } else {
-      healthyRecoveryMs = Math.min(healthyRecoveryMs, (before - 60) * decayMs);
-    }
-    state[key] = clamp(before - elapsed / decayMs);
+  // Split elapsed time at every 60 and 10 threshold crossing so health uses
+  // the correct rate even when a need crosses a threshold between updates.
+  const boundaries = [0, elapsed];
+  needsAtStart.forEach(({ value, decayMs }) => {
+    [60, 10].forEach((threshold) => {
+      if (value > threshold) {
+        const crossingMs = (value - threshold) * decayMs;
+        if (crossingMs > 0 && crossingMs < elapsed) boundaries.push(crossingMs);
+      }
+    });
   });
+  boundaries.sort((a, b) => a - b);
 
   const hourMs = 60 * 60 * 1000;
-  state.health = clamp(state.health - (totalCriticalNeedMs / hourMs) * 2);
-
-  // Recover only for the portion of the interval when all basic needs stayed at 60+.
-  if (allStartedHealthy && healthyRecoveryMs > 0) {
-    state.health = clamp(state.health + (healthyRecoveryMs / hourMs) * 2);
+  let healthChange = 0;
+  for (let i = 0; i < boundaries.length - 1; i += 1) {
+    const segmentStart = boundaries[i];
+    const segmentEnd = boundaries[i + 1];
+    if (segmentEnd <= segmentStart) continue;
+    const midpoint = (segmentStart + segmentEnd) / 2;
+    const values = needsAtStart.map(({ value, decayMs }) =>
+      clamp(value - midpoint / decayMs)
+    );
+    const allNeedsHealthy = values.every((value) => value >= 60);
+    const anyNeedCritical = values.some((value) => value < 10);
+    const healthRatePerHour = allNeedsHealthy ? 2 : (anyNeedCritical ? -3 : -2);
+    healthChange += ((segmentEnd - segmentStart) / hourMs) * healthRatePerHour;
   }
 
+  needsAtStart.forEach(({ key, decayMs, value }) => {
+    state[key] = clamp(value - elapsed / decayMs);
+  });
+  state.health = clamp(state.health + healthChange);
   state.lastNeedsUpdate = now;
 }
 
@@ -618,7 +626,6 @@ function doAction(action) {
     clearTimeout(petAnimationTimer);
     petAnimationTimer = null;
   }
-  const responses = dialogue[action];
   let actionSucceeded = true;
 
   if (action === "feed") {
@@ -631,7 +638,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 2);
       const gain = state.happiness < 15 || state.energy < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showMoodDialogue({ fallback: randomItem(responses) });
+      showActionDialogue(action);
       note.textContent = gain
         ? `You fed ${state.name}. +1 friendship. Needs keep declining as time passes.`
         : `You fed ${state.name}. Cinder needs more rest or comfort before this builds friendship.`;
@@ -649,7 +656,7 @@ function doAction(action) {
       const gain = state.hunger < 15 || state.energy < 15 ? 1 : 2;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
       state.lastPlayAt = Date.now();
-      showMoodDialogue({ fallback: randomItem(responses) });
+      showActionDialogue(action);
       note.textContent = `You played with ${state.name}. +${gain} friendship, but it used energy and increased hunger.`;
       pet.classList.add("playing");
     }
@@ -657,7 +664,7 @@ function doAction(action) {
     state.energy = clamp(state.energy + 22);
     state.happiness = clamp(state.happiness - 2);
     state.hunger = clamp(state.hunger - 1);
-    showMoodDialogue({ fallback: randomItem(responses) });
+    showActionDialogue(action);
     note.textContent = `${state.name} rested. Energy recovered, but hunger and happiness still need attention.`;
     pet.classList.add("sleeping");
     $("scene").classList.add("sleeping");
@@ -670,7 +677,7 @@ function doAction(action) {
       state.happiness = clamp(state.happiness + 7);
       const gain = state.energy < 10 || state.hunger < 10 ? 0 : 1;
       state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-      showMoodDialogue({ fallback: randomItem(responses) });
+      showActionDialogue(action);
       note.textContent = gain
         ? `You spent a quiet moment with ${state.name}. +1 friendship.`
         : `You comforted ${state.name}, but they need food or rest before friendship can grow.`;
@@ -691,7 +698,7 @@ function doAction(action) {
     state.happiness = clamp(state.happiness + 2);
     const gain = state.health < 10 || state.hunger < 10 ? 0 : 1;
     state.friendship = Math.min(FRIENDSHIP_GOAL, state.friendship + gain);
-    showMoodDialogue({ fallback: randomItem(responses) });
+    showActionDialogue(action);
     note.textContent = `You cleaned ${state.name}. Cleanliness restored${gain ? " and +1 friendship" : ""}.`;
     pet.classList.add("happy");
   }
@@ -884,7 +891,6 @@ function resolveRandomEvent(index) {
   const effects = choice.effects || {};
   // Even a neutral or cautious response can build a little trust; event choices
   // with explicit friendship values retain their intended, larger rewards.
-  const friendshipBefore = Number(state.friendship) || 0;
   if (typeof effects.friendship !== 'number') effects.friendship = 1;
   ['hunger', 'happiness', 'energy', 'cleanliness', 'health'].forEach(key => {
     if (typeof effects[key] === 'number') state[key] = clamp(Number(state[key] || 0) + effects[key]);
@@ -902,7 +908,6 @@ function resolveRandomEvent(index) {
   eventChoiceLocked = false;
   $('eventResultIcon').textContent = event.icon || '☕';
   $('eventResultTitle').textContent = choice.label;
-  const friendshipGained = Math.max(0, Number(state.friendship) - friendshipBefore);
   $('eventResultMessage').textContent = `${result}`;
   $('eventResultBackdrop').hidden = false;
   lastUserActivityAt = Date.now();
@@ -988,7 +993,7 @@ function load() {
   window.setInterval(updateRoomTimeOfDay, 60 * 1000);
   state.lastNeedsUpdate = Date.now();
   render();
-  showMoodDialogue({ idle: true });
+  showMoodDialogue();
   lastUserActivityAt = Date.now();
   scheduleIdleDialogue();
   startNeedsClock();
