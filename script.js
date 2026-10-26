@@ -309,7 +309,7 @@ function setAchievement(id, unlocked) {
   element.classList.toggle("unlocked", unlocked);
   element.classList.toggle("locked", !unlocked);
   element.querySelector("em").textContent = unlocked ? "UNLOCKED" : "LOCKED";
-  const icons = { achBirthday: "🎂", achDedicated: "9", achTrusted: "8", achFriend: "7", achClose: "6", achVeteran: "5", achGrinder: "4", achCareful: "3", achActions: "2", achFirst: "1" };
+  const icons = { achBirthday: "🎂", achDedicated: "9", achTrusted: "8", achVeteran: "7", achFriend: "6", achGrinder: "5", achClose: "4", achCareful: "3", achActions: "2", achFirst: "1" };
   element.querySelector("span").textContent = unlocked ? "✓" : icons[id];
 }
 
@@ -865,7 +865,7 @@ function showRandomEvent() {
     const title = document.createElement('strong'); title.textContent = choice.label;
     const detail = document.createElement('small');
     const friendshipReward = typeof choice.effects?.friendship === 'number' ? choice.effects.friendship : 1;
-    detail.textContent = `${choice.detail}`;
+    detail.textContent = `${choice.detail} · Friendship +${friendshipReward}`;
     button.append(title, detail);
     button.addEventListener('click', () => resolveRandomEvent(index), { once: true });
     choices.appendChild(button);
@@ -903,7 +903,7 @@ function resolveRandomEvent(index) {
   $('eventResultIcon').textContent = event.icon || '☕';
   $('eventResultTitle').textContent = choice.label;
   const friendshipGained = Math.max(0, Number(state.friendship) - friendshipBefore);
-  $('eventResultMessage').textContent = `${result}`;
+  $('eventResultMessage').textContent = `${result}${friendshipGained > 0 ? ` (+${friendshipGained} friendship)` : ''}`;
   $('eventResultBackdrop').hidden = false;
   lastUserActivityAt = Date.now();
   render();
