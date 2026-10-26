@@ -903,7 +903,7 @@ function resolveRandomEvent(index) {
   $('eventResultIcon').textContent = event.icon || '☕';
   $('eventResultTitle').textContent = choice.label;
   const friendshipGained = Math.max(0, Number(state.friendship) - friendshipBefore);
-  $('eventResultMessage').textContent = `${result}${friendshipGained > 0 ? ` (+${friendshipGained} friendship)` : ''}`;
+  $('eventResultMessage').textContent = `${result}`;
   $('eventResultBackdrop').hidden = false;
   lastUserActivityAt = Date.now();
   render();
