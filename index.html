@@ -12,7 +12,9 @@
   <main class="app">
     <section class="pet-card" aria-label="Your virtual pet">
       <div class="scene" id="scene">
-        <div class="sun"></div>
+        <div class="sun" aria-hidden="true"></div>
+        <div class="moon" aria-hidden="true"></div>
+        <div class="night-stars" aria-hidden="true"></div>
         <div class="cloud cloud-one"></div>
         <div class="cloud cloud-two"></div>
         <div class="sparkle sparkle-one">✦</div>
@@ -34,7 +36,7 @@
         </div>
         <div class="ground-shadow"></div>
         <div class="grass grass-one"></div><div class="grass grass-two"></div>
-        <div class="scene-label">CINDER ROOM</div>
+        <div class="scene-label" id="sceneLabel">CINDER ROOM · DAY</div>
       </div>
 
       <div class="pet-info">
@@ -42,6 +44,7 @@
           <p class="eyebrow">CURRENT RESIDENT</p>
           <h3 id="petName">Cinder</h3>
           <p class="pet-title" id="petTitle">Level 1 · New Companion</p>
+          <p class="pet-mood" id="currentMoodLabel" aria-live="polite">Mood: Happy</p>
         </div>
       </div>
 
@@ -120,6 +123,27 @@
 
     <footer>A gift for an adorable friend</footer>
   </main>
+
+  <div class="event-backdrop" id="eventBackdrop" hidden>
+    <section class="event-modal" role="dialog" aria-modal="true" aria-labelledby="eventTitle" aria-describedby="eventDescription">
+      <div class="event-icon" id="eventIcon">✨</div>
+      <p class="eyebrow">A MOMENT WITH CINDER</p>
+      <h2 id="eventTitle">A small surprise</h2>
+      <p class="event-description" id="eventDescription"></p>
+      <div class="event-choices" id="eventChoices"></div>
+      <small class="event-hint">Choose one response to continue.</small>
+    </section>
+  </div>
+
+  <div class="event-result-backdrop" id="eventResultBackdrop" hidden>
+    <section class="event-result-modal" role="dialog" aria-modal="true" aria-labelledby="eventResultTitle" aria-describedby="eventResultMessage">
+      <div class="event-result-icon" id="eventResultIcon">☕</div>
+      <p class="eyebrow">YOUR CHOICE</p>
+      <h2 id="eventResultTitle">What happened</h2>
+      <p id="eventResultMessage"></p>
+      <button class="primary-button" id="eventResultOkay" type="button">Continue</button>
+    </section>
+  </div>
 
   <div class="modal-backdrop" id="modalBackdrop" hidden>
     <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
