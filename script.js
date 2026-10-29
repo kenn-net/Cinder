@@ -559,7 +559,7 @@ function applyNeedsDecay(now = Date.now()) {
     );
     const allNeedsHealthy = values.every((value) => value >= 60);
     const anyNeedCritical = values.some((value) => value < 10);
-    const healthRatePerHour = allNeedsHealthy ? 2 : (anyNeedCritical ? -3 : -2);
+    const healthRatePerHour = allNeedsHealthy ? 3 : (anyNeedCritical ? -3 : -2);
     healthChange += ((segmentEnd - segmentStart) / hourMs) * healthRatePerHour;
   }
 
